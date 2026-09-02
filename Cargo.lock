@@ -2970,6 +2970,8 @@ dependencies = [
 [[package]]
 name = "gpui-ce"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0af79c6659e0fea67773cfbd751fc5c8e51be00139827f365d7d1237a468a4d"
 dependencies = [
  "accesskit",
  "anyhow",
@@ -3107,6 +3109,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_collections"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3f707750f990017957611d0909c1a53c6bd7b7c6cfb2fd8095141c99afa2a49"
 dependencies = [
  "gpui_ce_util",
  "indexmap",
@@ -3305,6 +3309,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_derive_refineable"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a399d81b69ae3cec57ab87c3e2f2a415b443481195dd091256abca771c377d2b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3314,6 +3320,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_linux"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ab947c84c6460f6431c99bd6a8b0954591bfa511c0006515ecc3897e7a903c84"
 dependencies = [
  "accesskit",
  "accesskit_unix",
@@ -3364,6 +3372,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_macos"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af0fe6b615e579ce0180198417815547c1c9ae654dc1e2382299f0c3f3564f79"
 dependencies = [
  "accesskit",
  "accesskit_macos",
@@ -3413,6 +3423,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_macros"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "92b8dc0ee902563235e47809c403e1d59b1beb53a7dc916e66f2f7864ac41483"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -3423,6 +3435,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_media"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c67e75d8c59ca24f95df41dd102aa7b4c93d306046ec0f2aa15c7f16022283c"
 dependencies = [
  "anyhow",
  "bindgen",
@@ -3437,6 +3451,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_platform"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "42fc3ad60af3e375b224e701a3e5db31f4def8e3a1099899882e937a9e9c12e9"
 dependencies = [
  "console_error_panic_hook",
  "gpui-ce",
@@ -3449,6 +3465,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_refineable"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "536a08dd1678cede87b6f91d58fc7dcfcb37c4d46075954d55db0b120b28dc28"
 dependencies = [
  "gpui_ce_derive_refineable",
 ]
@@ -3456,6 +3474,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_scheduler"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ba0e1b5482fa9bc8ee71117c981e4d9afc5511624bedd9454040c95aca26091"
 dependencies = [
  "async-task",
  "backtrace",
@@ -3470,6 +3490,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_shared_string"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eadabf028fc7322e74aa5d823defca7441d335cfd3592fb0ba3af1b0532e39da"
 dependencies = [
  "schemars",
  "serde",
@@ -3479,6 +3501,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_sum_tree"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e5462a23e7ff0d4ca09f585b6de33d9ef6c302d57106fac5f6a3cc35bdf9e8f"
 dependencies = [
  "heapless",
  "log",
@@ -3489,6 +3513,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_util"
 version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3214d3b3693a92cc8caf5547cedeb2f0bd5498be5475261e48dd0482bf9514a0"
 dependencies = [
  "anyhow",
  "log",
@@ -3498,6 +3524,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_web"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ac03c593fc6ee1957a7a55594b506ff6218662ea4a20523407252c2b5d570c01"
 dependencies = [
  "anyhow",
  "console_error_panic_hook",
@@ -3519,6 +3547,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_wgpu"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4d986e05a9106ac0ecf048f9b5a4a6b030d6b538836dc3ad0a0686da01d4a830"
 dependencies = [
  "anyhow",
  "bytemuck",
@@ -3548,6 +3578,8 @@ dependencies = [
 [[package]]
 name = "gpui_ce_windows"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "063326fe043ef3f51b0b36877e8d9f9af0e20d6dfe51efcb275a3cd380128e02"
 dependencies = [
  "accesskit",
  "accesskit_windows",

@@ -10,7 +10,7 @@ use gpui::{
 use rust_i18n::t;
 
 use crate::{
-    ActiveTheme as _, ElementExt as _, Icon, IconName, IndexPath, StyledExt as _,
+    ActiveTheme as _, Icon, IconName, IndexPath, StyledExt as _,
     VirtualListScrollHandle,
     actions::{Cancel, Confirm, SelectDown, SelectUp},
     command::{
@@ -847,17 +847,18 @@ impl Render for CommandState {
                 )
             })
             .child(
-                v_flex()
-                    .id("command-list-container")
-                    .role(Role::ListBox)
-                    .relative()
-                    .flex_1()
-                    // The rows carry their inset on the virtual list itself so
-                    // that a mid-scroll clip edge sits flush against the
-                    // surrounding dividers; only the empty slot needs the
-                    // container padding.
-                    .when(rows_count == 0, |this| this.p_1())
-                    .on_prepaint({
+                gpui_base::ElementExt::on_prepaint(
+                    v_flex()
+                        .id("command-list-container")
+                        .role(Role::ListBox)
+                        .relative()
+                        .flex_1()
+                        // The rows carry their inset on the virtual list itself so
+                        // that a mid-scroll clip edge sits flush against the
+                        // surrounding dividers; only the empty slot needs the
+                        // container padding.
+                        .when(rows_count == 0, |this| this.p_1()),
+                    {
                         let measure_state = command_state.clone();
                         move |bounds, window, cx| {
                             measure_state.update(cx, |state, cx| {
@@ -889,7 +890,8 @@ impl Render for CommandState {
                                 )
                             })
                         }
-                    })
+                        },
+                    )
                     .max_h(self.options.max_h)
                     .overflow_hidden()
                     // While a search is in flight the list is empty because the

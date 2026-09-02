@@ -20,7 +20,7 @@ use crate::{
 };
 
 use super::calendar::{Calendar, CalendarEvent, CalendarState, Date, Matcher};
-use gpui_base::{DatePicker as BaseDatePicker, ElementExt as _};
+use gpui_base::DatePicker as BaseDatePicker;
 
 const CONTEXT: &'static str = "DatePicker";
 pub(crate) fn init(cx: &mut App) {
@@ -402,27 +402,29 @@ impl RenderOnce for DatePicker {
 
         let picker_state = self.state.clone();
 
-        BaseDatePicker::new(self.id, &state.focus_handle)
-            .open(state.open)
-            .disabled(self.disabled)
-            .on_open_change(move |open, window, cx| {
-                picker_state.update(cx, |state, cx| {
-                    if !open {
-                        state.focus_back_if_need(window, cx);
-                    }
-                    state.open = open;
-                    cx.notify();
-                });
-            })
-            .key_context(CONTEXT)
-            .on_action(window.listener_for(&self.state, DatePickerState::on_delete))
-            .flex_none()
-            .w_full()
-            .relative()
-            .on_prepaint({
+        gpui_base::ElementExt::on_prepaint(
+            BaseDatePicker::new(self.id, &state.focus_handle)
+                .open(state.open)
+                .disabled(self.disabled)
+                .on_open_change(move |open, window, cx| {
+                    picker_state.update(cx, |state, cx| {
+                        if !open {
+                            state.focus_back_if_need(window, cx);
+                        }
+                        state.open = open;
+                        cx.notify();
+                    });
+                })
+                .key_context(CONTEXT)
+                .on_action(window.listener_for(&self.state, DatePickerState::on_delete))
+                .flex_none()
+                .w_full()
+                .relative(),
+            {
                 let state = self.state.clone();
                 move |bounds, _, cx| state.update(cx, |state, _| state.bounds = bounds)
-            })
+            },
+        )
             .input_text_size(self.size)
             .refine_style(&self.style)
             .child(

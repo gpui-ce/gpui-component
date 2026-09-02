@@ -8,7 +8,7 @@ use gpui::{
     prelude::FluentBuilder as _, px,
 };
 
-use crate::{element_ext::ElementExt, geometry::AxisExt};
+use crate::geometry::AxisExt;
 
 /// Events emitted by the [`SliderState`].
 pub enum SliderEvent {
@@ -672,13 +672,10 @@ impl StatefulInteractiveElement for SliderIndicator {}
 
 impl RenderOnce for SliderIndicator {
     fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
-        self.base
-            .id("slider-bar")
-            .children(self.children)
-            .on_prepaint({
-                let state = self.state;
-                move |bounds, _, cx| state.update(cx, |state, _| state.set_bounds(bounds))
-            })
+        crate::ElementExt::on_prepaint(self.base.id("slider-bar").children(self.children), {
+            let state = self.state;
+            move |bounds, _, cx| state.update(cx, |state, _| state.set_bounds(bounds))
+        })
     }
 }
 

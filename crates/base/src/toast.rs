@@ -12,7 +12,7 @@ use gpui::{
 };
 
 use crate::{
-    ElementExt as _, StyledExt as _,
+    StyledExt as _,
     motion::{Spring, spring},
 };
 
@@ -516,27 +516,29 @@ impl RenderOnce for ToastStack {
                     window,
                     cx,
                 );
-                div()
-                    .id(item_id.clone())
-                    .absolute()
-                    .top_0()
-                    .left_0()
-                    .right_0()
-                    .top(offset)
-                    .left(inset)
-                    .right(inset)
-                    .opacity(opacity)
-                    .when(!expanded && rank >= collapsed_visible, |this| {
-                        this.invisible()
-                    })
-                    .on_prepaint(move |bounds, _, cx| {
+                crate::ElementExt::on_prepaint(
+                    div()
+                        .id(item_id.clone())
+                        .absolute()
+                        .top_0()
+                        .left_0()
+                        .right_0()
+                        .top(offset)
+                        .left(inset)
+                        .right(inset)
+                        .opacity(opacity)
+                        .when(!expanded && rank >= collapsed_visible, |this| {
+                            this.invisible()
+                        }),
+                    move |bounds, _, cx| {
                         let mut heights = measured.borrow_mut();
                         if heights.get(&measured_id).copied() != Some(bounds.size.height) {
                             heights.insert(measured_id.clone(), bounds.size.height);
                             cx.refresh_windows();
                         }
-                    })
-                    .child(child)
+                    },
+                )
+                .child(child)
             });
 
         let hovered_state = self.state.hovered.clone();
