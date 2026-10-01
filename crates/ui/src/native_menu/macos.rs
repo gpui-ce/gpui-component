@@ -2,7 +2,7 @@
 
 use std::{cell::Cell, sync::Arc};
 
-use gpui::{Action, App, AssetSource, Pixels, Point, SharedString, Window};
+use gpui::{Action, App, AssetRegistry, Pixels, Point, SharedString, Window};
 use objc2::rc::Retained;
 use objc2::runtime::{AnyObject, NSObject};
 use objc2::{AnyThread, DefinedClass, MainThreadMarker, define_class, msg_send, sel};
@@ -52,7 +52,7 @@ impl MenuTarget {
 /// borrowed while the menu is open.
 pub(super) fn show(
     items: Vec<NativeMenuItem>,
-    asset_source: Arc<dyn AssetSource>,
+    asset_source: Arc<AssetRegistry>,
     position: Point<Pixels>,
     window: &mut Window,
     cx: &mut App,
@@ -88,7 +88,7 @@ pub(super) fn show(
 fn run_menu(
     view_ptr: usize,
     items: &[NativeMenuItem],
-    asset_source: &dyn AssetSource,
+    asset_source: &AssetRegistry,
     position: Point<Pixels>,
 ) -> Option<Box<dyn Action>> {
     let mtm = MainThreadMarker::new()?;
@@ -121,7 +121,7 @@ fn run_menu(
 /// to its index in `actions`, so the selected tag maps back to its action.
 fn build_menu<'a>(
     items: &'a [NativeMenuItem],
-    asset_source: &dyn AssetSource,
+    asset_source: &AssetRegistry,
     target: &MenuTarget,
     mtm: MainThreadMarker,
     actions: &mut Vec<&'a Box<dyn Action>>,
@@ -187,7 +187,7 @@ fn build_menu<'a>(
 
 fn ns_image_for_icon(
     path: &SharedString,
-    asset_source: &dyn AssetSource,
+    asset_source: &AssetRegistry,
 ) -> Option<Retained<NSImage>> {
     let image = resolve_icon_image(path, asset_source)?;
     if image.bytes.is_empty() {

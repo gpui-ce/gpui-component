@@ -27,7 +27,7 @@ use crate::ActiveTheme as _;
 use crate::Icon;
 
 #[cfg(any(target_os = "macos", target_os = "windows"))]
-use gpui::AssetSource;
+use gpui::AssetRegistry;
 use gpui::{Action, App, Pixels, Point, SharedString, Window};
 #[cfg(any(target_os = "macos", target_os = "windows"))]
 use gpui::{Image, ImageFormat};
@@ -202,13 +202,13 @@ impl NativeMenu {
 
         #[cfg(target_os = "macos")]
         {
-            macos::show(self.items, cx.asset_source().clone(), position, window, cx);
+            macos::show(self.items, cx.assets().clone(), position, window, cx);
         }
         #[cfg(target_os = "windows")]
         {
             windows::show(
                 self.items,
-                cx.asset_source().clone(),
+                cx.assets().clone(),
                 position,
                 cx.theme().is_dark(),
                 window,
@@ -223,7 +223,7 @@ impl NativeMenu {
 #[cfg(any(target_os = "macos", target_os = "windows"))]
 pub(super) fn resolve_icon_image(
     path: &SharedString,
-    asset_source: &dyn AssetSource,
+    asset_source: &AssetRegistry,
 ) -> Option<Arc<Image>> {
     if path.is_empty() {
         return None;
@@ -234,11 +234,7 @@ pub(super) fn resolve_icon_image(
     let bytes = if icon_path.is_absolute() {
         std::fs::read(icon_path).ok()?
     } else {
-        asset_source
-            .load(path.as_ref())
-            .ok()
-            .flatten()?
-            .into_owned()
+        asset_source.load(path.as_ref())?.into_owned()
     };
     let format = image_format(path.as_ref(), &bytes)?;
     Some(Arc::new(Image::from_bytes(format, bytes)))
@@ -411,16 +407,9 @@ mod tests {
         const ASSET_SVG: &[u8] = br#"<svg xmlns="http://www.w3.org/2000/svg"/>"#;
         const FILE_SVG: &[u8] = br#"<svg xmlns="http://www.w3.org/2000/svg"><path/></svg>"#;
 
-        struct TestAssetSource(Option<&'static [u8]>);
-
-        impl AssetSource for TestAssetSource {
-            fn load(&self, _path: &str) -> gpui::Result<Option<Cow<'static, [u8]>>> {
-                Ok(self.0.map(Cow::Borrowed))
-            }
-
-            fn list(&self, _path: &str) -> gpui::Result<Vec<SharedString>> {
-                Ok(Vec::new())
-            }
+        /// Assets holding only `path`, with the given contents.
+        fn assets_with(path: &SharedString, bytes: &'static [u8]) -> AssetRegistry {
+            [(path.clone(), Cow::Borrowed(bytes))].into_iter().collect()
         }
 
         /// A file written into the current directory for the duration of one test.
@@ -452,8 +441,11 @@ mod tests {
         #[test]
         fn test_native_menu_icon_asset_resolves_to_bytes() {
             let icon = Icon::new(IconName::Github);
-            let image = resolve_icon_image(icon.path_ref(), &gpui_component_assets::Assets)
-                .expect("icon asset should resolve");
+            let image = resolve_icon_image(
+                icon.path_ref(),
+                &AssetRegistry::from(gpui_component_assets::Assets),
+            )
+            .expect("icon asset should resolve");
 
             assert_eq!(image.format, ImageFormat::Svg);
             assert!(!image.bytes.is_empty());
@@ -464,11 +456,11 @@ mod tests {
             let path: SharedString = "native-menu-relative-shadow-test.svg".into();
             let _file = TestIconFile::create(path.as_ref(), FILE_SVG);
 
-            let image = resolve_icon_image(&path, &TestAssetSource(Some(ASSET_SVG)))
+            let image = resolve_icon_image(&path, &assets_with(&path, ASSET_SVG))
                 .expect("relative icon should resolve from the asset source");
             assert_eq!(image.bytes, ASSET_SVG);
 
-            assert!(resolve_icon_image(&path, &TestAssetSource(None)).is_none());
+            assert!(resolve_icon_image(&path, &AssetRegistry::default()).is_none());
         }
 
         #[test]
@@ -479,7 +471,7 @@ mod tests {
             let _file = TestIconFile::create(&path, FILE_SVG);
             let path: SharedString = path.to_string_lossy().into_owned().into();
 
-            let image = resolve_icon_image(&path, &TestAssetSource(Some(ASSET_SVG)))
+            let image = resolve_icon_image(&path, &assets_with(&path, ASSET_SVG))
                 .expect("absolute icon should resolve from the filesystem");
             assert_eq!(image.bytes, FILE_SVG);
         }
