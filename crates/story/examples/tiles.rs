@@ -351,7 +351,7 @@ impl StoryTiles {
 
             window
                 .update(cx, |_, window, _| {
-                    window.activate_window();
+                    window.activate();
                     window.set_window_title("Story Tiles");
                 })
                 .expect("failed to update window");

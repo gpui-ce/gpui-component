@@ -669,7 +669,7 @@ impl SystemNotificationRegistry {
         // Errs when the window is already closed: the entry is removed and the
         // application is still brought to the foreground.
         let _ = entry.window.update(cx, |_, window, cx| {
-            window.activate_window();
+            window.activate();
             if let Some(list) = entry.list.upgrade() {
                 // No-op when the toast already closed or was never created
                 // (system-only delivery).
@@ -1121,7 +1121,7 @@ mod tests {
             list: cx.new(|cx| NotificationList::new(window, cx)),
             other_focus: cx.focus_handle(),
         });
-        cx.update(|window, _| window.activate_window());
+        cx.update(|window, _| window.activate());
         let list = root.read_with(cx, |root, _| root.list.clone());
 
         // The left stack is pushed first, so it owns the lower group index.
@@ -1167,7 +1167,7 @@ mod tests {
             list: cx.new(|cx| NotificationList::new(window, cx)),
             other_focus: cx.focus_handle(),
         });
-        cx.update(|window, _| window.activate_window());
+        cx.update(|window, _| window.activate());
         let list = root.read_with(cx, |root, _| root.list.clone());
 
         list.update_in(cx, |list, window, cx| {
@@ -1215,7 +1215,7 @@ mod tests {
             list: cx.new(|cx| NotificationList::new(window, cx)),
             other_focus: cx.focus_handle(),
         });
-        cx.update(|window, _| window.activate_window());
+        cx.update(|window, _| window.activate());
         let list = root.read_with(cx, |root, _| root.list.clone());
 
         list.update_in(cx, |list, window, cx| {
@@ -1277,7 +1277,7 @@ mod tests {
 
         let list_focus = list.read_with(cx, |list, _| list.focus_handle.clone());
         cx.update(|window, cx| {
-            window.activate_window();
+            window.activate();
             list_focus.focus(window, cx);
             window.draw(cx).clear(cx);
         });
@@ -1578,7 +1578,7 @@ mod tests {
             list: cx.new(|cx| NotificationList::new(window, cx)),
             other_focus: cx.focus_handle(),
         });
-        cx.update(|window, _| window.activate_window());
+        cx.update(|window, _| window.activate());
         let list = root.read_with(cx, |r, _| r.list.clone());
 
         // Autohide expiry leaves the system notification in the center.

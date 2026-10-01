@@ -113,7 +113,7 @@ pub(super) fn install(ctx: &Ctx<'_>) -> JsResult<()> {
         "__window_activate",
         Func::from(|ctx: Ctx<'_>| -> JsResult<()> {
             write(&ctx, "window.activate_window()", |window, _| {
-                window.activate_window()
+                window.activate()
             })
         }),
     )?;

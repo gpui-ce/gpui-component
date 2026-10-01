@@ -1372,7 +1372,7 @@ mod tests {
         let (root, cx) = shell_root(cx);
         // Timeouts only run while the window is active, so the test has to say
         // that it is.
-        cx.update(|window, _| window.activate_window());
+        cx.update(|window, _| window.activate());
         cx.run_until_parked();
 
         root.update_in(cx, |root, window, cx| {

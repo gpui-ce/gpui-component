@@ -175,7 +175,7 @@ pub fn create_new_window_with_size<F, E>(
             .expect("failed to open window");
 
         window.update(cx, |_, window, _| {
-            window.activate_window();
+            window.activate();
             window.set_window_title(&title);
         })?;
 

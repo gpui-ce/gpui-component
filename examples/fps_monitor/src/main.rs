@@ -416,7 +416,7 @@ fn main() {
 
         cx.spawn(async move |cx| {
             cx.open_window(WindowOptions::default(), |window, cx| {
-                window.activate_window();
+                window.activate();
                 window.set_window_title("FPS Monitor");
                 cx.new(|cx| Example::new(window, cx))
             })

@@ -570,7 +570,7 @@ fn main() {
 
         cx.spawn(async move |cx| {
             cx.open_window(window_options, |window, cx| {
-                window.activate_window();
+                window.activate();
                 window.set_window_title("System Monitor");
 
                 Theme::change(ThemeMode::Dark, Some(window), cx);

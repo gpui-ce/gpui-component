@@ -445,7 +445,7 @@ impl StoryWorkspace {
 
             window
                 .update(cx, |_, window, cx| {
-                    window.activate_window();
+                    window.activate();
                     window.set_window_title("GPUI App");
                     cx.on_release(|_, cx| {
                         // exit app
