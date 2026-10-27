@@ -8,7 +8,7 @@ use gpui_base::HoverCard as BaseHoverCard;
 pub use gpui_base::HoverCardState;
 use web_time::Duration;
 
-use crate::{StyledExt as _, popover::Popover};
+use crate::popover::Popover;
 
 /// A hover card element that displays content when hovering over a trigger element.
 ///

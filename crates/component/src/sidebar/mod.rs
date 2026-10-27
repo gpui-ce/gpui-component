@@ -1,5 +1,5 @@
 use crate::{
-    ActiveTheme, Collapsible, Icon, IconName, Side, Sizable, StyledExt,
+    ActiveTheme, Collapsible, Icon, IconName, Side, Sizable,
     button::{Button, ButtonVariants},
     h_flex,
     scroll::ScrollableElement,

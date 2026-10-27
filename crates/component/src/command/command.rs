@@ -250,7 +250,7 @@ impl RenderOnce for Command {
             on_cancel: self.on_cancel,
         };
         self.state.update(cx, |state, cx| {
-            state.set_options(options);
+            state.set_options(options, cx);
             state.install_model(model, cx);
         });
 

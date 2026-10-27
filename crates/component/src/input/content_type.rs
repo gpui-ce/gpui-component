@@ -98,7 +98,7 @@ pub enum InputContentType {
 }
 
 impl InputContentType {
-    #[cfg(target_os = "macos")]
+    #[cfg(all(target_os = "macos", any(not(feature = "test-support"), test)))]
     pub(crate) const fn ns_text_content_type(self) -> Option<&'static str> {
         match self {
             Self::Name => Some("name"),

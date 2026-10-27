@@ -193,10 +193,7 @@ impl Icon {
             })
             .map(|this| match self.source {
                 IconSource::Path(path) => this.path(path),
-                // GPUI CE's Svg renders only asset paths; a data icon keeps
-                // its bytes for builders and clones but paints nothing until
-                // GPUI CE grows an inline-data API.
-                IconSource::Data(_) => this,
+                IconSource::Data(data) => this.data(&data),
             })
             .when_some(self.transformation, |this, transformation| {
                 this.with_transformation(transformation)

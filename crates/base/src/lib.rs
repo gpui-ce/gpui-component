@@ -67,6 +67,7 @@ mod table;
 mod tabs;
 pub mod text;
 mod text_boundary;
+mod text_compat;
 mod text_selection;
 mod theme;
 pub mod theme_tokens;
@@ -246,3 +247,6 @@ pub fn init(cx: &mut App) {
 
 #[cfg(feature = "test-support")]
 pub mod test_support;
+
+#[cfg(test)]
+mod test_text_system;

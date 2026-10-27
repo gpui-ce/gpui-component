@@ -5,8 +5,6 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::StyledExt as _;
-
 /// An unstyled linear progress root with controlled value accessibility.
 #[derive(IntoElement)]
 pub struct Progress {

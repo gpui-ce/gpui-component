@@ -4,7 +4,7 @@ use std::f32::consts::PI;
 
 use gpui::{
     Background, BorderStyle, Bounds, Hsla, PaintQuad, Path, PathBuilder, Pixels, Point, Window,
-    point, px, quad, size,
+    point, px, size,
 };
 
 const HALF_PI: f32 = PI / 2.;
@@ -158,16 +158,16 @@ impl<T> RadialLine<T> {
 
     /// Paint a dot on the RadialLine.
     fn paint_dot(&self, dot: Point<Pixels>) -> PaintQuad {
-        quad(
-            gpui::bounds(dot, size(self.dot_size, self.dot_size)),
-            self.dot_size / 2.,
-            self.dot_fill,
-            px(1.),
-            self.dot_stroke
-                .or_else(|| self.dot_fill.as_solid())
-                .unwrap_or_default(),
-            BorderStyle::default(),
-        )
+        gpui::PaintQuad::new(gpui::bounds(dot, size(self.dot_size, self.dot_size)))
+            .corner_radii(self.dot_size / 2.)
+            .background(self.dot_fill)
+            .border_widths(px(1.))
+            .border_color(
+                self.dot_stroke
+                    .or_else(|| self.dot_fill.as_solid())
+                    .unwrap_or_default(),
+            )
+            .border_style(BorderStyle::default())
     }
 
     /// Resolve the data to points around the center of the bounds.

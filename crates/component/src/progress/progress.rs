@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, Sizable, Size, StyledExt};
+use crate::{ActiveTheme, Sizable, Size};
 use gpui::{
     Animation, AnimationExt as _, App, Background, ElementId, Hsla, IntoElement, IsZero as _,
     ParentElement, RenderOnce, SharedString, StyleRefinement, Styled, Window, ease_in_out,

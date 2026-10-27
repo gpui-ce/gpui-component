@@ -4,7 +4,7 @@ use gpui::{Bounds, Half, Pixels, ShapedLine, TextAlign, px};
 
 use super::{WrappingIndent, display_map::LineLayout};
 
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub(crate) struct WhitespaceIndicators {
     pub(crate) space: ShapedLine,
     pub(crate) tab: ShapedLine,
@@ -40,9 +40,9 @@ impl LastLayout {
 
     pub(super) fn alignment_offset(&self, line_width: Pixels) -> Pixels {
         match self.text_align {
-            TextAlign::Left => px(0.),
+            TextAlign::Start | TextAlign::Left => px(0.),
             TextAlign::Center => (self.content_width - line_width).half().max(px(0.)),
-            TextAlign::Right => (self.content_width - line_width).max(px(0.)),
+            TextAlign::End | TextAlign::Right => (self.content_width - line_width).max(px(0.)),
         }
     }
 }

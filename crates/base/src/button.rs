@@ -8,7 +8,7 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::{RoleOverride, Selectable, StateStyle, StyledExt as _, TestSupportExt as _};
+use crate::{RoleOverride, Selectable, StateStyle, TestSupportExt as _};
 
 type ClickHandler = Rc<dyn Fn(&ClickEvent, &mut Window, &mut App)>;
 

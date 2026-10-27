@@ -7,7 +7,7 @@ use gpui::{
     point, prelude::FluentBuilder as _, px,
 };
 
-use crate::{FocusTrapElement as _, StyledExt as _, actions::Cancel};
+use crate::{FocusTrapElement as _, actions::Cancel};
 
 const CONTEXT: &str = "Sheet";
 

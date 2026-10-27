@@ -7,8 +7,8 @@ use gpui::{
     prelude::FluentBuilder as _,
 };
 
+use crate::TestSupportExt as _;
 use crate::actions::{Cancel, Confirm, SelectDown, SelectUp};
-use crate::{StyledExt as _, TestSupportExt as _};
 
 const CONTEXT: &str = "Select";
 

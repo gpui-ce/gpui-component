@@ -1,5 +1,5 @@
 use super::InlineTokenContext;
-use crate::{ActiveTheme as _, Icon, StyledExt as _};
+use crate::{ActiveTheme as _, Icon};
 use gpui::{
     App, InteractiveElement as _, IntoElement, ParentElement as _, RenderOnce, StyleRefinement,
     Styled, Window, div, prelude::FluentBuilder as _,

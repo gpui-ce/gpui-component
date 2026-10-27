@@ -6,7 +6,7 @@ use smallvec::SmallVec;
 
 use gpui_base::{Toolbar as BaseToolbar, ToolbarGroup as BaseToolbarGroup};
 
-use crate::{Sizable, Size, StyleSized as _, StyledExt as _};
+use crate::{Sizable, Size, StyleSized as _};
 
 enum ToolbarItem {
     Sized(Box<dyn FnOnce(Size) -> AnyElement>),

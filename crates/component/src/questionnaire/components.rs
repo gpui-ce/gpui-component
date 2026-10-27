@@ -9,7 +9,7 @@ use gpui_base::RadioGroup;
 use rust_i18n::t;
 
 use crate::{
-    ActiveTheme as _, IconName, Sizable, Size, StyledExt as _, ThemeStyled as _,
+    ActiveTheme as _, IconName, Sizable, Size, ThemeStyled as _,
     button::{Button, ButtonVariants as _},
     icon::IconNamed as _,
     input::Input,

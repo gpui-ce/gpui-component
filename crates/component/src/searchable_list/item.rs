@@ -5,8 +5,7 @@ use gpui::{
 };
 
 use crate::{
-    ActiveTheme, Disableable, Icon, IconName, Selectable, Sizable, Size, StyleSized, StyledExt,
-    h_flex,
+    ActiveTheme, Disableable, Icon, IconName, Selectable, Sizable, Size, StyleSized, h_flex,
 };
 
 /// A single row element used inside searchable-list dropdowns (Select, ComboBox, MultiComboBox).

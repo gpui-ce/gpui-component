@@ -1,5 +1,5 @@
 use crate::theme::ActiveTheme;
-use crate::{Disableable, Icon, IconName, Sizable, Size, StyledExt, h_flex};
+use crate::{Disableable, Icon, IconName, Sizable, Size, h_flex};
 use std::rc::Rc;
 
 use gpui::{

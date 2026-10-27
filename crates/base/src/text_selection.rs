@@ -527,7 +527,7 @@ pub(crate) fn text_rows_extent(text_layout: &TextLayout, line_height: Pixels) ->
         last_line_top += line.size(layout_line_height).height;
     }
     let last_row_top = lines.last().map_or(top, |line| {
-        last_line_top + line.wrap_boundaries.len() as f32 * layout_line_height
+        last_line_top + line.line_count().saturating_sub(1) as f32 * layout_line_height
     });
     (top, last_row_top + line_height)
 }
@@ -2943,7 +2943,11 @@ mod tests {
                 .map(|(index, text)| {
                     let text = StyledText::new(text.clone());
                     self.layouts.push(text.layout().clone());
-                    div().absolute().top(px(index as f32 * 40.)).child(text)
+                    div()
+                        .flex()
+                        .absolute()
+                        .top(px(index as f32 * 40.))
+                        .child(text)
                 })
                 .collect::<Vec<_>>();
             div().size_full().children(children)
@@ -2969,9 +2973,14 @@ mod tests {
                 self.selection.clone(),
                 TextSelectionRegistration::new(
                     Hitbox {
+                        fragments: None,
+                        tags: Vec::new(),
                         id: HitboxId::placeholder(),
                         bounds,
-                        content_mask: ContentMask { bounds },
+                        content_mask: ContentMask {
+                            fade_out: Default::default(),
+                            bounds,
+                        },
                         behavior: HitboxBehavior::Normal,
                     },
                     bounds,
@@ -3128,9 +3137,14 @@ mod tests {
     fn public_selection_data_uses_builders_and_readers(cx: &mut TestAppContext) {
         let bounds = Bounds::new(point(px(1.), px(2.)), size(px(30.), px(10.)));
         let hitbox = Hitbox {
+            fragments: None,
+            tags: Vec::new(),
             id: HitboxId::placeholder(),
             bounds,
-            content_mask: ContentMask { bounds },
+            content_mask: ContentMask {
+                fade_out: Default::default(),
+                bounds,
+            },
             behavior: HitboxBehavior::Normal,
         };
         let scope = TextSelectionScopeId::from_raw(7);
@@ -3939,9 +3953,14 @@ mod tests {
                         participant.selection.clone(),
                         TextSelectionRegistration::new(
                             Hitbox {
+                                fragments: None,
+                                tags: Vec::new(),
                                 id: HitboxId::placeholder(),
                                 bounds: collapsed,
-                                content_mask: ContentMask { bounds: collapsed },
+                                content_mask: ContentMask {
+                                    fade_out: Default::default(),
+                                    bounds: collapsed,
+                                },
                                 behavior: HitboxBehavior::Normal,
                             },
                             collapsed,
@@ -4101,9 +4120,14 @@ mod tests {
             selection.set_local_selection(true, cx);
             let bounds = Bounds::new(point(px(0.), px(0.)), size(px(100.), px(20.)));
             let hitbox = Hitbox {
+                fragments: None,
+                tags: Vec::new(),
                 id: HitboxId::placeholder(),
                 bounds,
-                content_mask: ContentMask { bounds },
+                content_mask: ContentMask {
+                    fade_out: Default::default(),
+                    bounds,
+                },
                 behavior: HitboxBehavior::Normal,
             };
             selection.register(

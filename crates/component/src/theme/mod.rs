@@ -24,7 +24,6 @@ mod mono_font;
 mod motion;
 mod registry;
 mod schema;
-mod system_font;
 mod theme_color;
 
 pub use color::*;
@@ -328,7 +327,7 @@ impl Theme {
         let fonts_changed =
             (&theme.font_family, &theme.mono_font_family) != (&fonts_before.0, &fonts_before.1);
         if mode_changed || reload_mode || fonts_changed {
-            system_font::resolve_default_font(cx);
+            // GPUI 0.3 caches virtual system-font resolution in TextSystem.
             mono_font::resolve_default_mono_font(cx);
         }
         Self::sync_base(cx);

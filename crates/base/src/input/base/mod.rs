@@ -1,4 +1,4 @@
-use crate::{StateStyle, StyledExt as _, TestSupportExt as _};
+use crate::{StateStyle, TestSupportExt as _};
 use gpui::{
     AnyElement, App, Div, ElementId, InteractiveElement, Interactivity, IntoElement, ParentElement,
     Refineable as _, RenderOnce, Role, SharedString, StatefulInteractiveElement, StyleRefinement,
@@ -265,7 +265,10 @@ mod tests {
             .focused(true)
             .border_color(gpui::red())
             .styles(|styles| styles.focused(|style| style.border_color(gpui::blue())));
-        assert_eq!(focused.resolved_style().border_color, Some(gpui::blue()));
+        assert_eq!(
+            focused.resolved_style().border_color,
+            Some(gpui::blue().into())
+        );
 
         let disabled = InputBase::new("disabled")
             .focused(true)

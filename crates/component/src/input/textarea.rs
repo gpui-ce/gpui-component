@@ -7,7 +7,7 @@ use gpui::{
 
 use super::{Input, TextareaState};
 use crate::native_menu::NativeMenu;
-use crate::{RoleOverride, Sizable, Size, StyledExt as _};
+use crate::{RoleOverride, Sizable, Size};
 
 /// A styled ordinary multi-line text field.
 #[derive(IntoElement)]

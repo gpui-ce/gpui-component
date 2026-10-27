@@ -2546,8 +2546,8 @@ impl<M: InputModeKind> InputBaseState<M> {
         // For Right alignment use 0 margin: the cursor indicator is clamped inside bounds
         // in layout_cursors, so shifting the text here would cause a first-click visual jump.
         let safety_margin = match last_layout.text_align {
-            TextAlign::Left => RIGHT_MARGIN,
-            TextAlign::Right => px(0.),
+            TextAlign::Start | TextAlign::Left => RIGHT_MARGIN,
+            TextAlign::End | TextAlign::Right => px(0.),
             TextAlign::Center => CURSOR_WIDTH,
         };
         if let Some(vi) = last_layout

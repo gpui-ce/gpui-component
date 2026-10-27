@@ -1,3 +1,5 @@
+use crate::text_compat::ShapedLineExt as _;
+use crate::text_compat::{LineFragment as WrapLineFragment, LineWrapperExt as _};
 use std::{
     cell::RefCell,
     ops::Range,
@@ -9,9 +11,9 @@ use unicode_segmentation::UnicodeSegmentation as _;
 use gpui::{
     AbsoluteLength, AnyElement, App, AvailableSpace, Bounds, DefiniteLength, Element, ElementId,
     GlobalElementId, Hsla, ImageSource, InspectorElementId, InteractiveElement as _, IntoElement,
-    LayoutId, LineFragment as WrapLineFragment, ObjectFit, Pixels, Refineable as _, ShapedLine,
-    SharedString, Size, StatefulInteractiveElement as _, Styled, StyledImage as _, TextRun,
-    TextStyle, WhiteSpace, Window, img, point, prelude::FluentBuilder as _, px, relative, size,
+    LayoutId, ObjectFit, Pixels, Refineable as _, ShapedLine, SharedString, Size,
+    StatefulInteractiveElement as _, Styled, StyledImage as _, TextRun, TextStyle, WhiteSpace,
+    Window, img, point, prelude::FluentBuilder as _, px, relative, size,
 };
 
 use crate::text::text_view::{LinkClickHandlerFn, handle_link_click};
@@ -677,7 +679,11 @@ impl Element for InlineFlow {
         let radius = crate::Theme::global(cx).tokens.radius.sm;
         for (element, background) in prepaint {
             if let Some((bounds, color)) = background {
-                window.paint_quad(gpui::fill(*bounds, *color).corner_radii(radius));
+                window.paint_quad(
+                    gpui::PaintQuad::new(*bounds)
+                        .background(*color)
+                        .corner_radii(radius),
+                );
             }
             element.paint(window, cx);
         }
@@ -1123,7 +1129,11 @@ fn code_background(
         .iter()
         .map(|run| {
             let font = window.text_system().resolve_font(&run.font);
-            window.text_system().cap_height(font, font_size)
+            window
+                .text_system()
+                .typographic_bounds(font, font_size, 'H')
+                .map(|bounds| bounds.size.height)
+                .unwrap_or_else(|_| window.text_system().ascent(font, font_size))
         })
         .fold(Pixels::ZERO, Pixels::max);
     let vertical_padding = font_size * 0.125 + shaped_line.descent / 2.;
@@ -1268,7 +1278,7 @@ fn line_ranges(
 /// Where the first line of `fragments` (which start at byte `start`) wraps at
 /// `wrap_width`; `end` when it all fits.
 fn next_wrap(
-    wrapper: &mut gpui::LineWrapperHandle,
+    wrapper: &mut crate::text_compat::LineWrapper,
     fragments: &[WrapLineFragment],
     wrap_width: Pixels,
     start: usize,
@@ -1467,7 +1477,6 @@ fn push_text_wrap_fragments<'a>(
                     text,
                     font_size * highlight.font_size_scale.unwrap_or(1.),
                     &runs,
-                    None,
                 )
                 .width
         };
@@ -1602,7 +1611,7 @@ fn shape_line(
     runs: &[TextRun],
     window: &mut Window,
 ) -> ShapedLine {
-    window.text_system().shape_line(text, font_size, runs, None)
+    window.text_system().shape_line(text, font_size, runs)
 }
 
 /// The line height GPUI's text layout gives a plain line in `text_style`.

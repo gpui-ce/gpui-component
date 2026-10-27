@@ -4,7 +4,7 @@ use gpui::{
     prelude::FluentBuilder as _, relative,
 };
 
-use crate::{ActiveTheme, StyledExt};
+use crate::ActiveTheme;
 
 /// A tag for displaying keyboard keybindings.
 #[derive(IntoElement, Clone, Debug)]

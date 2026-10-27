@@ -219,7 +219,7 @@ impl RenderOnce for WindowBorder {
                             // does not grow the paint bounds for blur, so a larger blur
                             // or offset would be visibly cut off by the window surface.
                             gpui::BoxShadow {
-                                color: hsla(0., 0., 0., 0.18 * opacity),
+                                color: hsla(0., 0., 0., 0.18 * opacity).into(),
                                 // GNOME-style ambient shadow: horizontally centered
                                 // with only a slight downward bias.
                                 blur_radius: px(10.),
@@ -230,7 +230,7 @@ impl RenderOnce for WindowBorder {
                             // The contact layer adds definition without increasing the
                             // space between the content and the outer window bounds.
                             gpui::BoxShadow {
-                                color: hsla(0., 0., 0., 0.18 * opacity),
+                                color: hsla(0., 0., 0., 0.18 * opacity).into(),
                                 blur_radius: px(3.),
                                 spread_radius: px(0.),
                                 offset: point(px(0.0), px(1.0)),

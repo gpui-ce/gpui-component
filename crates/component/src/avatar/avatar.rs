@@ -5,7 +5,7 @@ use gpui::{
 use gpui_base::{Avatar as BaseAvatar, AvatarFallback, AvatarImage};
 
 use crate::{
-    ActiveTheme, Icon, IconName, Sizable, Size, StyledExt, ThemeStyled as _,
+    ActiveTheme, Icon, IconName, Sizable, Size, ThemeStyled as _,
     avatar::{AvatarSized as _, avatar_size},
     oklch,
 };

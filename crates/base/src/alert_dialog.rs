@@ -6,7 +6,6 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::StyledExt as _;
 use crate::{Dialog, DialogChangeReason, DialogHandle};
 
 macro_rules! alert_part {

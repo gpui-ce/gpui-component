@@ -15,7 +15,7 @@ use crate::spinner::Spinner;
 use crate::touch_selection::{EditMenuItem, TouchSelectionOverlay};
 use crate::{ActiveTheme, Colorize, v_flex};
 use crate::{IconName, Size};
-use crate::{RoleOverride, Selectable, StyledExt, h_flex};
+use crate::{RoleOverride, Selectable, h_flex};
 use crate::{Sizable, StyleSized};
 use gpui_base::InputBase as BaseInput;
 use rust_i18n::t;
@@ -1081,7 +1081,7 @@ mod tests {
             cx.update(|window, cx| {
                 base.set_disabled(disabled, cx);
                 base.set_readonly(!disabled, cx);
-                window.blur();
+                window.blur(cx);
                 Input::handle_accessibility_focus(&base, window, cx);
                 assert_eq!(
                     base.presentation(cx).focus_handle().is_focused(window),

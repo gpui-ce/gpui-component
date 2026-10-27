@@ -3,7 +3,7 @@ use gpui::{
     div, prelude::FluentBuilder, px, relative,
 };
 
-use crate::{ActiveTheme, Icon, Sizable, Size, StyledExt, ThemeStyled as _, h_flex, white};
+use crate::{ActiveTheme, Icon, Sizable, Size, ThemeStyled as _, h_flex, white};
 
 #[derive(Default, Clone)]
 enum BadgeVariant {

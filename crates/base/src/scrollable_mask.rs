@@ -2,15 +2,15 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use gpui::{
-    App, Axis, BorderStyle, Bounds, ContentMask, Edges, Element, ElementId, GlobalElementId,
-    Hitbox, Hsla, InteractiveElement as _, IntoElement, IsZero as _, LayoutId, OngoingScroll,
-    PaintQuad, ParentElement as _, Point, Position, ScrollHandle, ScrollWheelEvent,
+    App, AppContext as _, Axis, BorderStyle, Bounds, ContentMask, Edges, Element, ElementId,
+    GlobalElementId, Hitbox, Hsla, InteractiveElement as _, IntoElement, IsZero as _, LayoutId,
+    OngoingScroll, ParentElement as _, Point, Position, ScrollHandle, ScrollWheelEvent,
     StatefulInteractiveElement as _, Style, StyleRefinement, Styled as _, Window, div, px,
     relative,
 };
 use gpui::{Corners, Pixels};
 
-use crate::{AxisExt, OngoingScrollExt as _, ScrollbarHandle, StyledExt as _};
+use crate::{AxisExt, OngoingScrollExt as _, ScrollbarHandle};
 
 /// Default element id for a mask: the call site, so two masks built in
 /// different places never share their per-gesture axis lock.
@@ -197,16 +197,20 @@ impl<H: ScrollbarHandle + Clone> Element for ScrollableMask<H> {
             })
             .unwrap_or_default();
 
-        window.with_content_mask(Some(ContentMask { bounds }), |window| {
+        let mask = ContentMask {
+            bounds,
+            fade_out: Default::default(),
+        };
+        window.with_content_mask(Some(mask), |window| {
             if let Some(color) = self.debug {
-                window.paint_quad(PaintQuad {
-                    bounds,
-                    border_widths: Edges::all(px(1.0)),
-                    border_color: color.into(),
-                    background: gpui::transparent_white().into(),
-                    corner_radii: Corners::all(px(0.)),
-                    border_style: BorderStyle::default(),
-                });
+                window.paint_quad(
+                    gpui::PaintQuad::new(bounds)
+                        .border_widths(Edges::all(px(1.0)))
+                        .border_color(color)
+                        .background(gpui::transparent_white())
+                        .corner_radii(Corners::all(px(0.)))
+                        .border_style(BorderStyle::default()),
+                );
             }
 
             window.on_mouse_event({

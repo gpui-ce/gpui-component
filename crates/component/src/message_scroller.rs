@@ -8,7 +8,7 @@ use gpui::{
 };
 use gpui_base::motion::{Transition, transition};
 
-use crate::{ActiveTheme as _, Disableable as _, IconName, StyledExt as _, button::Button};
+use crate::{ActiveTheme as _, Disableable as _, IconName, button::Button};
 use crate::{
     button::ButtonVariants as _,
     scroll::{ScrollableElement as _, ScrollableMask},

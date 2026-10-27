@@ -10,7 +10,7 @@ use gpui::{
 };
 
 use crate::{
-    Decrement, Increment, StyledExt as _,
+    Decrement, Increment,
     actions::{SelectLeft, SelectNextColumn, SelectPrevColumn, SelectRight},
     input::Delete,
 };

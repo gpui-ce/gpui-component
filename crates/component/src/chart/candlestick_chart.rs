@@ -2,7 +2,7 @@ use std::{hash::Hash, rc::Rc};
 
 use gpui::{
     AnyElement, App, Bounds, ElementId, Hsla, IntoElement, Pixels, Point, SharedString, Window,
-    fill, point, px,
+    point, px,
 };
 use gpui_component_macros::IntoPlot;
 use rust_i18n::t;
@@ -380,7 +380,7 @@ where
                     origin_point(px(center_x - 0.5), px(wick_top), origin),
                     origin_point(px(center_x + 0.5), px(wick_bottom), origin),
                 );
-                window.paint_quad(fill(wick_bounds, color));
+                window.paint_quad(gpui::PaintQuad::new(wick_bounds).background(color));
 
                 // Draw body (open to close rectangle)
                 // For bullish: top is close, bottom is open
@@ -396,7 +396,7 @@ where
                     origin_point(px(body_right), px(bottom), origin),
                 );
 
-                window.paint_quad(fill(body_bounds, color));
+                window.paint_quad(gpui::PaintQuad::new(body_bounds).background(color));
             }
         });
     }

@@ -4,8 +4,6 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::StyledExt as _;
-
 /// An unstyled avatar root that renders its image slot or fallback slot.
 #[derive(IntoElement)]
 pub struct Avatar {

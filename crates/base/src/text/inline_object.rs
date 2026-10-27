@@ -5,10 +5,10 @@ use std::{
 };
 
 use gpui::{
-    AnyElement, App, AvailableSpace, Bounds, CursorStyle, Element, ElementId, GlobalElementId,
-    Hitbox, HitboxBehavior, InspectorElementId, IntoElement, LayoutId, MouseButton, MouseDownEvent,
-    ParentElement, Pixels, Refineable as _, Role, SharedString, Size, Styled, StyledText,
-    TextStyle, Window, div, px, size,
+    AnyElement, App, AppContext as _, AvailableSpace, Bounds, CursorStyle, Element, ElementId,
+    GlobalElementId, Hitbox, HitboxBehavior, InspectorElementId, IntoElement, LayoutId,
+    MouseButton, MouseDownEvent, ParentElement, Pixels, Refineable as _, Role, SharedString, Size,
+    Styled, StyledText, TextStyle, Window, div, px, size,
 };
 
 use super::{
@@ -59,12 +59,10 @@ impl MeasuredInlineObject {
     ) -> Self {
         let font_size = style.font_size.to_pixels(window.rem_size());
         let text: SharedString = text.replace(['\r', '\n'], " ").into();
-        let line = window.text_system().shape_line(
-            text.clone(),
-            font_size,
-            &[style.to_run(text.len())],
-            None,
-        );
+        let line =
+            window
+                .text_system()
+                .shape_line(text.clone(), font_size, &[style.to_run(text.len())]);
         let height = style
             .line_height_in_pixels(window.rem_size())
             .max(line.ascent + line.descent);
@@ -328,7 +326,7 @@ impl Element for InlineObject {
         }
         if selected {
             let color = view.as_ref().unwrap().read(cx).text_view_style.selection();
-            window.paint_quad(gpui::fill(bounds, color));
+            window.paint_quad(gpui::PaintQuad::new(bounds).background(color));
         }
         if let Some(link) = self.link.clone() {
             window.set_cursor_style(CursorStyle::PointingHand, hitbox);

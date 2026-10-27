@@ -1,4 +1,5 @@
 //! A visual row whose offsets remain in source UTF-8 bytes.
+use crate::text_compat::ShapedLineExt as _;
 use gpui::{App, Pixels, Point, ShapedLine, SharedString, TextAlign, Window, point, px};
 use std::ops::Range;
 
@@ -134,7 +135,7 @@ impl InputLine {
             Content::Inline(fragments) => {
                 let remaining = (width.unwrap_or(self.width) - self.width).max(px(0.));
                 let offset = match align {
-                    TextAlign::Right => remaining,
+                    TextAlign::End | TextAlign::Right => remaining,
                     TextAlign::Center => remaining / 2.,
                     _ => px(0.),
                 };

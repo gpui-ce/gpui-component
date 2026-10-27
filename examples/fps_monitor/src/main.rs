@@ -416,7 +416,7 @@ fn main() {
         cx.activate(true);
 
         gpui_kit::open_window(WindowOptions::default(), cx, |window, cx| {
-            window.activate_window();
+            window.activate();
             window.set_window_title("FPS Monitor");
             cx.new(|cx| Example::new(window, cx))
         })

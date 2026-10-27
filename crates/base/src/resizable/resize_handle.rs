@@ -388,7 +388,7 @@ impl<T: 'static, E: 'static + Render> Element for ResizeHandle<T, E> {
             window.on_mouse_event({
                 let state = state.clone();
                 let hitbox = hitbox.clone();
-                move |ev: &MouseDownEvent, phase, window, _| {
+                move |_ev: &MouseDownEvent, phase, window, _| {
                     if phase.bubble()
                         && hitbox.is_hovered(window)
                         && state.set(ResizeHandleState::Pressed)
@@ -401,7 +401,7 @@ impl<T: 'static, E: 'static + Render> Element for ResizeHandle<T, E> {
             window.on_mouse_event({
                 let state = state.clone();
                 let hitbox = hitbox.clone();
-                move |ev: &MouseMoveEvent, phase, window, _| {
+                move |_ev: &MouseMoveEvent, phase, window, _| {
                     if !phase.bubble() {
                         return;
                     }
@@ -424,7 +424,7 @@ impl<T: 'static, E: 'static + Render> Element for ResizeHandle<T, E> {
             window.on_mouse_event({
                 let state = state.clone();
                 let hitbox = hitbox.clone();
-                move |ev: &MouseUpEvent, _, window, _| {
+                move |_ev: &MouseUpEvent, _, window, _| {
                     if !state.get().is_active() {
                         return;
                     }

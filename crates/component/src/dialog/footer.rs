@@ -4,7 +4,7 @@ use gpui::{
 };
 
 use crate::{
-    ActiveTheme as _, StyledExt as _,
+    ActiveTheme as _,
     button::Button,
     dialog::{Confirm, DialogDispatchAnchor},
     h_flex,

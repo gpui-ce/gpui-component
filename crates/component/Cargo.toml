@@ -129,10 +129,6 @@ num-traits = "0.2"
 # Markdown Parser
 markdown = { version = "1.0.0", features = ["serde"] }
 
-# HTML Parser
-html5ever = "0.27"
-markup5ever_rcdom = "0.3.0"
-
 # Calendar
 chrono = "0.4.38"
 
@@ -218,6 +214,7 @@ windows = { workspace = true, features = [
 ] }
 
 [dev-dependencies]
+gpui_ce_parley = { version = "0.3.0", default-features = false }
 gpui = { workspace = true, features = ["test-support"] }
 indoc = "2"
 

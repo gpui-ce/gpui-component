@@ -6,8 +6,6 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::StyledExt as _;
-
 /// Upper bound on tab-stop hops when wrapping focus back into the toolbar, so
 /// a toolbar whose items all vanished from the tab order can never hang the
 /// key handler. Mirrors `Root`'s focus-trap loop bound.

@@ -1,4 +1,4 @@
-use gpui::{Background, Bounds, Pixels, Point, Window, fill, point, px, size};
+use gpui::{Background, Bounds, Pixels, Point, Window, point, px, size};
 
 use super::origin_point;
 
@@ -80,7 +80,9 @@ impl Grid {
     pub fn paint(&self, bounds: &Bounds<Pixels>, window: &mut Window) {
         for (start, end) in self.points(bounds) {
             for (start, end) in dash_segments(start, end, self.dash_array.as_deref()) {
-                window.paint_quad(fill(line_bounds(start, end), self.stroke));
+                window.paint_quad(
+                    gpui::PaintQuad::new(line_bounds(start, end)).background(self.stroke),
+                );
             }
         }
     }

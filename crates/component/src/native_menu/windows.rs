@@ -5,7 +5,7 @@ use std::{
     sync::{Arc, OnceLock},
 };
 
-use gpui::{Action, App, AssetSource, ImageFormat, Pixels, Point, Window};
+use gpui::{Action, App, AssetRegistry, ImageFormat, Pixels, Point, Window};
 use raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use windows::Win32::Foundation::{BOOL, GlobalFree, HANDLE, HWND, POINT};
 use windows::Win32::Graphics::Gdi::{
@@ -41,7 +41,7 @@ const MENU_IMAGE_SIZE: u32 = 16;
 /// run from a foreground task to avoid re-entering GPUI while it is borrowed.
 pub(super) fn show(
     items: Vec<NativeMenuItem>,
-    asset_source: Arc<dyn AssetSource>,
+    assets: Arc<AssetRegistry>,
     position: Point<Pixels>,
     dark_mode: bool,
     window: &mut Window,
@@ -65,7 +65,7 @@ pub(super) fn show(
         let Some(action) = run_menu(
             hwnd,
             &items,
-            asset_source.as_ref(),
+            assets.as_ref(),
             client_x,
             client_y,
             image_px,
@@ -87,7 +87,7 @@ pub(super) fn show(
 fn run_menu(
     hwnd: isize,
     items: &[NativeMenuItem],
-    asset_source: &dyn AssetSource,
+    assets: &AssetRegistry,
     client_x: i32,
     client_y: i32,
     image_px: u32,
@@ -105,7 +105,7 @@ fn run_menu(
 
         // Bitmaps attached to menu items must outlive the menu; freed below.
         let mut bitmaps: Vec<HBITMAP> = Vec::new();
-        let menu = build_menu(items, asset_source, &mut actions, &mut bitmaps, image_px)?;
+        let menu = build_menu(items, assets, &mut actions, &mut bitmaps, image_px)?;
 
         let mut point = POINT {
             x: client_x,
@@ -196,7 +196,7 @@ unsafe fn apply_menu_theme(hwnd: HWND, dark_mode: bool) {
 /// Win32 menu creation; the returned `HMENU` must be destroyed by the caller.
 unsafe fn build_menu<'a>(
     items: &'a [NativeMenuItem],
-    asset_source: &dyn AssetSource,
+    assets: &AssetRegistry,
     actions: &mut Vec<&'a Box<dyn Action>>,
     bitmaps: &mut Vec<HBITMAP>,
     image_px: u32,
@@ -237,7 +237,7 @@ unsafe fn build_menu<'a>(
                 };
                 let _ = unsafe { AppendMenuW(menu, flags, id, PCWSTR(wide.as_ptr())) };
                 if let Some(icon) = icon {
-                    if let Some(bitmap) = unsafe { load_hbitmap(icon, asset_source, image_px) } {
+                    if let Some(bitmap) = unsafe { load_hbitmap(icon, assets, image_px) } {
                         let info = MENUITEMINFOW {
                             cbSize: std::mem::size_of::<MENUITEMINFOW>() as u32,
                             fMask: MIIM_BITMAP,
@@ -256,7 +256,7 @@ unsafe fn build_menu<'a>(
                 items,
             } => {
                 let Some(submenu) =
-                    (unsafe { build_menu(items, asset_source, actions, bitmaps, image_px) })
+                    (unsafe { build_menu(items, assets, actions, bitmaps, image_px) })
                 else {
                     continue;
                 };
@@ -324,10 +324,10 @@ impl Drop for GdiplusSession {
 /// Calls GDI+ /GDI flat APIs; the returned handle is owned by the caller.
 unsafe fn load_hbitmap(
     icon: &crate::Icon,
-    asset_source: &dyn AssetSource,
+    assets: &AssetRegistry,
     image_px: u32,
 ) -> Option<HBITMAP> {
-    let image = resolve_icon_image(icon, asset_source)?;
+    let image = resolve_icon_image(icon, assets)?;
     if image.bytes.is_empty() {
         return None;
     }

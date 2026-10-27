@@ -1,6 +1,6 @@
 use std::{panic::Location, rc::Rc};
 
-use crate::{InteractiveElementExt as _, StyledExt};
+use crate::InteractiveElementExt as _;
 
 use super::{Scrollbar, ScrollbarAxis, ScrollbarHandle};
 use gpui::{
@@ -376,7 +376,7 @@ mod tests {
                     .w(px(200.))
                     .child(
                         crate::v_flex().flex_1().overflow_hidden().child(
-                            div().flex_1().overflow_hidden().child(
+                            crate::v_flex().flex_1().overflow_hidden().child(
                                 crate::v_flex()
                                     .size_full()
                                     .overflow_y_scrollbar()
@@ -396,22 +396,24 @@ mod tests {
         fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
             // Mimics a Dialog with `max_h`: the panel grows with content up
             // to the max height, then the body starts scrolling.
-            crate::v_flex()
-                .w(px(200.))
-                .max_h(px(100.))
-                .child(
-                    crate::v_flex().flex_1().overflow_hidden().child(
-                        div().flex_1().overflow_hidden().child(
-                            crate::v_flex()
-                                .size_full()
-                                .overflow_y_scrollbar()
-                                .child(plain_row(50.))
-                                .child(plain_row(50.))
-                                .child(row("max-height-last-row", 50.)),
+            div().size_full().child(
+                crate::v_flex()
+                    .w(px(200.))
+                    .max_h(px(100.))
+                    .child(
+                        crate::v_flex().flex_1().overflow_hidden().child(
+                            crate::v_flex().flex_1().overflow_hidden().child(
+                                crate::v_flex()
+                                    .size_full()
+                                    .overflow_y_scrollbar()
+                                    .child(plain_row(50.))
+                                    .child(plain_row(50.))
+                                    .child(row("max-height-last-row", 50.)),
+                            ),
                         ),
-                    ),
-                )
-                .child(row("max-height-footer", 10.))
+                    )
+                    .child(row("max-height-footer", 10.)),
+            )
         }
     }
 
@@ -431,6 +433,7 @@ mod tests {
     fn max_height_parent_clamps_and_scrolls(cx: &mut TestAppContext) {
         cx.update(crate::init);
         let (_, cx) = cx.add_window_view(|_, _| MaxHeightParentTest);
+        cx.simulate_resize(gpui::size(px(200.), px(100.)));
         let cx: &mut VisualTestContext = cx;
         draw(cx);
 

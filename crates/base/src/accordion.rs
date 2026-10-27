@@ -8,8 +8,6 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::StyledExt as _;
-
 type ChangeHandler = Rc<dyn Fn(bool, &ClickEvent, &mut Window, &mut App)>;
 
 /// An unstyled accordion root for application-owned items.

@@ -1,14 +1,14 @@
 use std::rc::Rc;
 
 use gpui::{
-    Anchor, AnyElement, App, Context, DismissEvent, ElementId, EventEmitter, FocusHandle,
-    Focusable, InteractiveElement as _, IntoElement, KeyBinding, MouseButton, ParentElement as _,
-    Render, RenderOnce, Role, StatefulInteractiveElement as _, StyleRefinement, Styled,
-    Subscription, Window, div, prelude::FluentBuilder as _,
+    Anchor, AnyElement, App, AppContext as _, Context, DismissEvent, ElementId, EventEmitter,
+    FocusHandle, Focusable, InteractiveElement as _, IntoElement, KeyBinding, MouseButton,
+    ParentElement as _, Render, RenderOnce, Role, StatefulInteractiveElement as _, StyleRefinement,
+    Styled, Subscription, Window, div, prelude::FluentBuilder as _,
 };
 
 use crate::{
-    DeferredPopover, GlobalState, Popup, ResolvedPosition, Selectable, StyledExt as _,
+    DeferredPopover, GlobalState, Popup, ResolvedPosition, Selectable,
     actions::{Cancel, Confirm},
 };
 
@@ -378,7 +378,7 @@ impl RenderOnce for Popover {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::{AppContext as _, Context, Render, point, px};
+    use gpui::{Context, Render, point, px};
     use std::{cell::RefCell, rc::Rc};
 
     /// Popover state lives in element state, which is collected as soon as it

@@ -6,7 +6,7 @@ use gpui::{
     StyleRefinement, Styled, Window, canvas, deferred, div, point, px,
 };
 
-use crate::{Positioner, ResolvedPosition, StyledExt as _};
+use crate::{Positioner, ResolvedPosition};
 
 /// Distance kept between a popup and the window edge.
 const WINDOW_MARGIN: Pixels = px(8.);

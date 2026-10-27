@@ -5,8 +5,6 @@ use gpui::{
     SharedString, StatefulInteractiveElement, StyleRefinement, Styled, Window, div,
 };
 
-use crate::StyledExt as _;
-
 type PageChangeHandler = Rc<dyn Fn(usize, &mut Window, &mut App)>;
 
 /// A visible destination in a pagination control.

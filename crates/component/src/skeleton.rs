@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, StyledExt};
+use crate::ActiveTheme;
 use gpui::ColorExt as _;
 use gpui::{
     Animation, AnimationExt, IntoElement, RenderOnce, StyleRefinement, Styled, bounce, div,

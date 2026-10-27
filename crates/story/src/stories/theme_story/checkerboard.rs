@@ -53,17 +53,17 @@ impl RenderOnce for Checkerboard {
                                     let origin = bounds.origin
                                         + gpui_kit::point(size * (col as f32), size * (row as f32));
 
-                                    window.paint_quad(gpui_kit::PaintQuad {
-                                        bounds: gpui_kit::Bounds {
+                                    window.paint_quad(
+                                        gpui_kit::gpui::PaintQuad::new(gpui_kit::Bounds {
                                             origin,
                                             size: gpui_kit::size(size, size),
-                                        },
-                                        corner_radii: gpui_kit::Corners::default(),
-                                        background: c2.into(),
-                                        border_widths: gpui_kit::Edges::default(),
-                                        border_color: gpui_kit::transparent_black(),
-                                        border_style: gpui_kit::BorderStyle::default(),
-                                    });
+                                        })
+                                        .corner_radii(gpui_kit::Corners::default())
+                                        .background(c2)
+                                        .border_widths(gpui_kit::Edges::default())
+                                        .border_color(gpui_kit::transparent_black())
+                                        .border_style(gpui_kit::BorderStyle::default()),
+                                    );
                                 }
                             }
                         }

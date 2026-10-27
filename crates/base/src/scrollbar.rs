@@ -8,11 +8,12 @@ use crate::{
     theme::ActiveTheme as _,
 };
 use gpui::{
-    Anchor, App, Axis, Background, BorderStyle, Bounds, ColorExt as _, ContentMask, CursorStyle,
-    Edges, Element, ElementId, EntityId, GlobalElementId, Hitbox, HitboxBehavior, Hsla,
-    InspectorElementId, IntoElement, IsZero, LayoutId, ListState, MouseDownEvent, MouseMoveEvent,
-    MouseUpEvent, PaintQuad, Pixels, Point, Position, ScrollHandle, ScrollWheelEvent, Size, Style,
-    UniformListScrollHandle, Window, fill, point, prelude::FluentBuilder, px, relative, size,
+    Anchor, App, AppContext as _, Axis, Background, BorderStyle, Bounds, ColorExt as _,
+    ContentMask, CursorStyle, Edges, Element, ElementId, EntityId, GlobalElementId, Hitbox,
+    HitboxBehavior, Hsla, InspectorElementId, IntoElement, IsZero, LayoutId, ListState,
+    MouseDownEvent, MouseMoveEvent, MouseUpEvent, Pixels, Point, Position, ScrollHandle,
+    ScrollWheelEvent, Size, Style, UniformListScrollHandle, Window, point, prelude::FluentBuilder,
+    px, relative, size,
 };
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -1289,9 +1290,13 @@ impl Element for Scrollbar {
         cx: &mut App,
     ) -> Self::PrepaintState {
         let bounds = self.resolved_viewport_bounds(bounds);
-        let hitbox = window.with_content_mask(Some(ContentMask { bounds }), |window| {
-            window.insert_hitbox(bounds, HitboxBehavior::Normal)
-        });
+        let hitbox = window.with_content_mask(
+            Some(ContentMask {
+                fade_out: Default::default(),
+                bounds,
+            }),
+            |window| window.insert_hitbox(bounds, HitboxBehavior::Normal),
+        );
 
         let state = window
             .use_state(cx, |_, _| ScrollbarState::default())
@@ -1532,9 +1537,13 @@ impl Element for Scrollbar {
                 )
             };
 
-            let bar_hitbox = window.with_content_mask(Some(ContentMask { bounds }), |window| {
-                window.insert_hitbox(bounds, gpui::HitboxBehavior::Normal)
-            });
+            let bar_hitbox = window.with_content_mask(
+                Some(ContentMask {
+                    fade_out: Default::default(),
+                    bounds,
+                }),
+                |window| window.insert_hitbox(bounds, gpui::HitboxBehavior::Normal),
+            );
 
             states.push(AxisPrepaintState {
                 axis,
@@ -1581,6 +1590,7 @@ impl Element for Scrollbar {
 
         window.with_content_mask(
             Some(ContentMask {
+                fade_out: Default::default(),
                 bounds: hitbox_bounds,
             }),
             |window| {
@@ -1609,33 +1619,37 @@ impl Element for Scrollbar {
                     window.set_cursor_style(CursorStyle::default(), &state.bar_hitbox);
 
                     window.paint_layer(hitbox_bounds, |cx| {
-                        cx.paint_quad(fill(painted_bounds, painted_track_bg));
-
-                        cx.paint_quad(PaintQuad {
-                            bounds: painted_bounds,
-                            corner_radii: (0.).into(),
-                            background: gpui::transparent_black().into(),
-                            border_widths: if is_vertical {
-                                Edges {
-                                    top: px(0.),
-                                    right: px(0.),
-                                    bottom: px(0.),
-                                    left: px(0.),
-                                }
-                            } else {
-                                Edges {
-                                    top: px(0.),
-                                    right: px(0.),
-                                    bottom: px(0.),
-                                    left: px(0.),
-                                }
-                            },
-                            border_color: painted_border.into(),
-                            border_style: BorderStyle::default(),
-                        });
+                        cx.paint_quad(
+                            gpui::PaintQuad::new(painted_bounds).background(painted_track_bg),
+                        );
 
                         cx.paint_quad(
-                            fill(painted_thumb_bounds, painted_thumb_bg).corner_radii(radius),
+                            gpui::PaintQuad::new(painted_bounds)
+                                .corner_radii(0.)
+                                .background(gpui::transparent_black())
+                                .border_widths(if is_vertical {
+                                    Edges {
+                                        top: px(0.),
+                                        right: px(0.),
+                                        bottom: px(0.),
+                                        left: px(0.),
+                                    }
+                                } else {
+                                    Edges {
+                                        top: px(0.),
+                                        right: px(0.),
+                                        bottom: px(0.),
+                                        left: px(0.),
+                                    }
+                                })
+                                .border_color(painted_border)
+                                .border_style(BorderStyle::default()),
+                        );
+
+                        cx.paint_quad(
+                            gpui::PaintQuad::new(painted_thumb_bounds)
+                                .background(painted_thumb_bg)
+                                .corner_radii(radius),
                         );
                     });
 

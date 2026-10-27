@@ -1737,7 +1737,11 @@ mod tests {
     fn the_renderer_composes_frame_then_tab_bar_then_content(cx: &mut TestAppContext) {
         let (_group, calls, cx) = build_skinned_group(&["a"], cx);
 
-        cx.update(|window, cx| window.draw(cx).clear(cx));
+        cx.update(|window, cx| {
+            // This probe observes renderer calls, so request a fresh render.
+            window.refresh();
+            window.draw(cx).clear(cx);
+        });
 
         assert_eq!(
             *calls.borrow(),
@@ -1752,7 +1756,11 @@ mod tests {
     fn an_empty_group_asks_the_renderer_for_its_empty_state(cx: &mut TestAppContext) {
         let (_group, calls, cx) = build_skinned_group(&[], cx);
 
-        cx.update(|window, cx| window.draw(cx).clear(cx));
+        cx.update(|window, cx| {
+            // This probe observes renderer calls, so request a fresh render.
+            window.refresh();
+            window.draw(cx).clear(cx);
+        });
 
         assert_eq!(
             *calls.borrow(),

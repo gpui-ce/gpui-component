@@ -2,7 +2,7 @@ use gpui::{
     AnyElement, App, IntoElement, ParentElement, RenderOnce, StyleRefinement, Styled, Window,
 };
 
-use crate::{ActiveTheme as _, StyledExt as _, v_flex};
+use crate::{ActiveTheme as _, v_flex};
 
 /// Content container for a dialog.
 #[derive(IntoElement)]

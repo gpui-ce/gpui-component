@@ -13,7 +13,7 @@ use rust_i18n::t;
 use super::{CONTEXT, scroll_mask::CarouselScrollMask, state::CarouselState};
 use crate::{
     AxisExt as _, Disableable as _, ElementExt as _, Selectable as _, Sizable as _, Size,
-    StyledExt as _, ThemeStyled as _,
+    ThemeStyled as _,
     actions::{SelectDown, SelectFirst, SelectLast, SelectLeft, SelectRight, SelectUp},
     button::Button,
     icon::IconName,

@@ -508,6 +508,7 @@ mod tests {
 
     #[gpui::test]
     fn long_labels_preserve_track_size_in_narrow_containers(cx: &mut TestAppContext) {
+        crate::test_text_system::install(cx);
         struct NarrowSwitch {
             size: Size,
             checked: bool,

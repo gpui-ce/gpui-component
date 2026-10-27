@@ -184,6 +184,6 @@ impl RenderOnce for SelectionHandles {
             .absolute()
             .size_0(),
         )
-        .with_priority(gpui_base::POPUP_PRIORITY)
+        .priority(gpui_base::POPUP_PRIORITY)
     }
 }

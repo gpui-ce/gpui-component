@@ -8,7 +8,7 @@ use std::{cell::Cell, rc::Rc, time::Duration};
 
 use crate::{ActiveTheme as _, ThemeStyled as _};
 use crate::{
-    Selectable, StyledExt as _,
+    Selectable,
     animation::ease_out_cubic,
     styled::{popover_ring, popover_shadow},
     v_flex,
@@ -381,10 +381,14 @@ impl RenderOnce for Popover {
                                     // The triangle ends exactly at the surface edge.
                                     // Cover the ring and the antialiased base on both
                                     // sides of that edge before drawing its two slopes.
-                                    window.paint_quad(gpui::fill(
-                                        arrow_join_bounds(points, side, px(1.)),
-                                        background,
-                                    ));
+                                    window.paint_quad(
+                                        gpui::PaintQuad::new(arrow_join_bounds(
+                                            points,
+                                            side,
+                                            px(1.),
+                                        ))
+                                        .background(background),
+                                    );
                                     if appearance {
                                         let mut outline = PathBuilder::stroke(px(1.));
                                         outline.move_to(points[0]);
@@ -967,15 +971,14 @@ mod tests {
     #[gpui::test]
     fn the_enter_motion_starts_over_every_time_the_dropdown_opens(cx: &mut gpui::TestAppContext) {
         cx.update(crate::init);
+        let executor = cx.executor();
         let (view, window) = cx.add_window_view(|_, _| Harness { open: true });
 
         window.update(|window, cx| window.draw(cx).clear(cx));
         let opening = window.debug_bounds("surface").unwrap().origin;
 
-        // The animation runs off the wall clock, so settling is waited out
-        // rather than stepped. Several times the duration leaves room for a
-        // loaded machine.
-        std::thread::sleep(DROPDOWN_ENTER_DURATION * 4);
+        // GPUI 0.3 animations use the scheduler clock, which tests control.
+        executor.advance_clock(DROPDOWN_ENTER_DURATION * 4);
         window.update(|window, cx| window.draw(cx).clear(cx));
         let settled = window.debug_bounds("surface").unwrap().origin;
 

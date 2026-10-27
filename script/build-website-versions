@@ -67,7 +67,7 @@ git -C "$repo_root" worktree add --detach "$work_dir/main" origin/main >/dev/nul
 # the temporary website copies have no workspace manifest next to them.
 gpui_pre_version() {
   git -C "$repo_root" show "$1:Cargo.toml" 2>/dev/null \
-    | sed -nE 's/^gpui[[:space:]]*=.*package[[:space:]]*=[[:space:]]*"gpui-pre".*version[[:space:]]*=[[:space:]]*"=?([^"]+)".*/\1/p' \
+    | sed -nE 's/^gpui[[:space:]]*=.*package[[:space:]]*=[[:space:]]*"(gpui-ce|gpui-pre)".*version[[:space:]]*=[[:space:]]*"=?([^"]+)".*/\2/p' \
     | head -n 1
 }
 
@@ -75,8 +75,15 @@ gpui_kit_version() {
   if [[ "$1" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     printf '%s\n' "${1#v}"
   else
-    git -C "$repo_root" show "$1:crates/kit/Cargo.toml" \
-      | sed -nE 's/^version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' | head -n 1
+    local kit_manifest_version
+    kit_manifest_version=$(git -C "$repo_root" show "$1:crates/kit/Cargo.toml" \
+      | sed -nE 's/^version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' | head -n 1)
+    if [ -n "$kit_manifest_version" ]; then
+      printf '%s\n' "$kit_manifest_version"
+    else
+      git -C "$repo_root" show "$1:Cargo.toml" \
+        | python3 -c 'import sys, tomllib; print(tomllib.load(sys.stdin.buffer)["workspace"]["package"]["version"])'
+    fi
   fi
 }
 

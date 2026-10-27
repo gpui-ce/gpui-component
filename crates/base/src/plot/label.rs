@@ -37,7 +37,7 @@ fn shape_label(
     };
     window
         .text_system()
-        .shape_line(text.clone(), font_size, &[text_run], None)
+        .shape_line(text.clone(), font_size, &[text_run])
 }
 
 /// Returns the rendered width of `text` at `font_size` using the window's

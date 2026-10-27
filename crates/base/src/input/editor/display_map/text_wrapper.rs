@@ -1,12 +1,11 @@
 use super::inline_line::InputLine;
+use crate::text_compat::{LineFragment, LineWrapperExt as _};
 use gpui::Half;
 use std::borrow::Cow;
 use std::ops::Range;
 use std::rc::Rc;
 
-use gpui::{
-    App, Font, LineFragment, Pixels, Point, ShapedLine, Size, TextAlign, Window, point, px, size,
-};
+use gpui::{App, Font, Pixels, Point, ShapedLine, Size, TextAlign, Window, point, px, size};
 use ropey::Rope;
 use smallvec::SmallVec;
 use sum_tree::{Bias, Dimensions, SumTree};
@@ -421,7 +420,7 @@ impl TextWrapper {
         new_text: &Rope,
         wrap_line: &mut F,
     ) where
-        F: FnMut(&str, Pixels, usize) -> Vec<gpui::Boundary>,
+        F: FnMut(&str, Pixels, usize) -> Vec<crate::text_compat::Boundary>,
     {
         // Remove the old changed lines.
         let buffer_line_count = self.lines_count();
@@ -991,11 +990,27 @@ mod tests {
     use super::*;
     use std::rc::Rc;
 
-    use gpui::{Boundary, FontFeatures, FontStyle, FontWeight, px};
+    use crate::text_compat::Boundary;
+    use gpui::{FontFeatures, FontStyle, FontWeight, px};
+
+    fn test_line(len: usize) -> ShapedLine {
+        let text_system = gpui::WindowTextSystem::new(std::sync::Arc::new(gpui::TextSystem::new(
+            std::sync::Arc::new(gpui::TestTextSystem),
+        )));
+        text_system.shape_line(
+            "a".repeat(len).into(),
+            px(0.),
+            &[gpui::TextRun {
+                len,
+                ..Default::default()
+            }],
+        )
+    }
 
     #[test]
     fn test_update() {
         let font = gpui::Font {
+            width: Default::default(),
             family: "Arial".into(),
             weight: FontWeight::default(),
             style: FontStyle::Normal,
@@ -1192,6 +1207,7 @@ mod tests {
 
     fn test_font() -> gpui::Font {
         gpui::Font {
+            width: Default::default(),
             family: "Arial".into(),
             weight: FontWeight::default(),
             style: FontStyle::Normal,
@@ -1332,8 +1348,8 @@ mod tests {
     fn test_line_layout() {
         let mut line_layout = LineLayout::new();
 
-        let line1 = ShapedLine::default().with_len(100);
-        let line2 = ShapedLine::default().with_len(50);
+        let line1 = test_line(100);
+        let line2 = test_line(50);
         let wrapped_lines = smallvec::smallvec![line1, line2];
         line_layout.set_wrapped_lines(wrapped_lines);
         assert_eq!(line_layout.len(), 150);
@@ -1364,9 +1380,9 @@ mod tests {
     fn test_position_for_index_prefers_first_leading_empty_visual_line() {
         let mut line_layout = LineLayout::new();
         line_layout.set_wrapped_lines(smallvec::smallvec![
-            ShapedLine::default(),
-            ShapedLine::default(),
-            ShapedLine::default().with_len(3),
+            test_line(0),
+            test_line(0),
+            test_line(3),
         ]);
 
         assert_eq!(
@@ -1379,10 +1395,7 @@ mod tests {
     fn clicking_past_a_wrapped_row_keeps_the_caret_on_that_row() {
         // One buffer line wrapped into two visual rows, splitting at byte 10.
         let mut line_layout = LineLayout::new();
-        line_layout.set_wrapped_lines(smallvec::smallvec![
-            ShapedLine::default().with_len(10),
-            ShapedLine::default().with_len(5),
-        ]);
+        line_layout.set_wrapped_lines(smallvec::smallvec![test_line(10), test_line(5),]);
         let last_layout = test_last_layout(px(20.));
 
         // Clicking past the last glyph of the first row resolves to the wrap boundary, which is
@@ -1464,6 +1477,7 @@ mod tests {
     #[test]
     fn test_offset_to_display_point() {
         let font = gpui::Font {
+            width: Default::default(),
             family: "Arial".into(),
             weight: FontWeight::default(),
             style: FontStyle::Normal,
@@ -1636,10 +1650,7 @@ mod tests {
     #[test]
     fn test_wrap_indent_offsets_continuation_lines() {
         let mut line_layout = LineLayout::new();
-        line_layout.set_wrapped_lines(smallvec::smallvec![
-            ShapedLine::default().with_len(5),
-            ShapedLine::default().with_len(10),
-        ]);
+        line_layout.set_wrapped_lines(smallvec::smallvec![test_line(5), test_line(10),]);
 
         line_layout = line_layout.wrap_indent(px(20.0));
 

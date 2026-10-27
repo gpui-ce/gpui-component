@@ -6,7 +6,7 @@ use std::{
 use gpui::ColorExt as _;
 use gpui::{
     AnyElement, App, Bounds, Corners, ElementId, Hsla, IntoElement, Pixels, Point, SharedString,
-    TextAlign, Window, fill, linear_color_stop, linear_gradient, point, prelude::FluentBuilder, px,
+    TextAlign, Window, linear_color_stop, linear_gradient, point, prelude::FluentBuilder, px,
 };
 use gpui_component_macros::IntoPlot;
 
@@ -660,7 +660,11 @@ impl<T> Plot for SankeyChart<T> {
                     // Keep tiny nodes visible with a minimum 1px height.
                     origin_point(px(node.x1), px(node.y1.max(node.y0 + 1.)), bounds.origin),
                 );
-                window.paint_quad(fill(node_bounds, colors[node.index]).corner_radii(corner_radii));
+                window.paint_quad(
+                    gpui::PaintQuad::new(node_bounds)
+                        .background(colors[node.index])
+                        .corner_radii(corner_radii),
+                );
             }
         });
 

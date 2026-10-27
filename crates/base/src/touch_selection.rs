@@ -9,7 +9,7 @@
 //! to draw them. The handles and the menu themselves are drawn by the styled
 //! layer, which also decides how large a handle's touch target is.
 
-use gpui::{Bounds, Hsla, Pixels, Point, Window, fill, point, px, size};
+use gpui::{Bounds, Hsla, Pixels, Point, Window, point, px, size};
 
 /// One end of a selection, as a touch handle grabs it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -180,8 +180,12 @@ impl TouchHandle {
             point(caret.left() - Self::KNOB_SIZE / 2., knob_top),
             size(Self::KNOB_SIZE, Self::KNOB_SIZE),
         );
-        window.paint_quad(fill(bar, color));
-        window.paint_quad(fill(knob, color).corner_radii(Self::KNOB_SIZE / 2.));
+        window.paint_quad(gpui::PaintQuad::new(bar).background(color));
+        window.paint_quad(
+            gpui::PaintQuad::new(knob)
+                .background(color)
+                .corner_radii(Self::KNOB_SIZE / 2.),
+        );
     }
 }
 

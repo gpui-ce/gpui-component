@@ -183,7 +183,7 @@ fn select_emits_one_dismiss_event_for_each_open_to_closed_transition(cx: &mut Te
             form.language.clone()
         })
         .unwrap();
-        cx.update_window(handle.into(), |_, window, _| window.activate_window())
+        cx.update_window(handle.into(), |_, window, _| window.activate())
             .unwrap();
         cx.run_until_parked();
         let events = Rc::new(RefCell::new(Vec::new()));
@@ -218,7 +218,7 @@ fn select_emits_one_dismiss_event_for_each_open_to_closed_transition(cx: &mut Te
                 match close {
                     "escape" => window.press("escape", cx),
                     "outside" => window.click("agree", cx),
-                    "blur" => window.blur(),
+                    "blur" => window.blur(cx),
                     "confirm" => window.press("enter", cx),
                     _ => unreachable!(),
                 }
@@ -236,7 +236,7 @@ fn select_emits_one_dismiss_event_for_each_open_to_closed_transition(cx: &mut Te
                 // Follow-up Escape and blur notifications must not dismiss twice.
                 language.update(cx, |language, cx| language.focus(window, cx));
                 window.press("escape", cx);
-                window.blur();
+                window.blur(cx);
                 window.render_frame(cx);
             })
             .unwrap();

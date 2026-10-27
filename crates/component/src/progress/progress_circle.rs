@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, Sizable, Size, StyledExt};
+use crate::{ActiveTheme, Sizable, Size};
 use gpui::Bounds;
 use gpui::ColorExt as _;
 use gpui::prelude::FluentBuilder as _;

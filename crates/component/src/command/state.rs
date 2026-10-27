@@ -171,11 +171,18 @@ impl CommandState {
     }
 
     /// Apply the presentation of the latest [`crate::command::Command`] render.
-    pub(crate) fn set_options(&mut self, options: CommandOptions) {
+    pub(crate) fn set_options(&mut self, options: CommandOptions, cx: &mut Context<Self>) {
+        let changed = self.options.style != options.style
+            || self.options.max_h != options.max_h
+            || self.options.bordered != options.bordered
+            || self.options.placeholder != options.placeholder;
         if self.options.style.text != options.style.text {
             self.needs_measure = true;
         }
         self.options = options;
+        if changed {
+            cx.notify();
+        }
     }
 
     pub(crate) fn install_model(&mut self, model: CommandModel, cx: &mut Context<Self>) {
@@ -797,7 +804,7 @@ impl CommandState {
 
         let action = item.action.as_ref()?;
         Kbd::binding_for_action_in(action.as_ref(), &self.focus_handle(cx), window)
-            .or_else(|| Kbd::binding_for_action(action.as_ref(), None, window))
+            .or_else(|| Kbd::binding_for_action(action.as_ref(), Some(CONTEXT), window))
     }
 
     fn render_item(
@@ -1224,13 +1231,16 @@ mod tests {
             cx: &mut gpui::Context<Self>,
         ) -> impl IntoElement {
             let width = self.width.clone();
-            let item = self.state.update(cx, |state, cx| {
+            let mut item = self.state.update(cx, |state, cx| {
                 state.render_item(self.matched_ix, window, cx)
             });
 
-            div()
-                .on_children_prepainted(move |bounds, _, _| width.set(Some(bounds[0].size.width)))
-                .child(item)
+            // Measure without installing temporary hitboxes over the real palette.
+            width.set(Some(
+                item.layout_as_root(AvailableSpace::min_size(), window, cx)
+                    .width,
+            ));
+            gpui::Empty
         }
     }
 
@@ -2334,6 +2344,7 @@ mod tests {
 
     #[gpui::test]
     fn wrapping_rows_remeasure_for_the_list_content_width(cx: &mut TestAppContext) {
+        crate::test_text_system::install(cx);
         cx.update(crate::init);
 
         let (harness, cx) = cx.add_window_view(|window, cx| WrappingHarness {
@@ -2402,6 +2413,7 @@ mod tests {
 
     #[gpui::test]
     fn wrapping_rows_remeasure_when_inherited_typography_changes(cx: &mut TestAppContext) {
+        crate::test_text_system::install(cx);
         cx.update(crate::init);
 
         let (harness, cx) = cx.add_window_view(|window, cx| WrappingHarness {
@@ -2590,6 +2602,8 @@ mod tests {
             move |_, _| settled_state.into_any_element(),
         );
         let after_first_draw = renders.get();
+        // Standalone draws do not process entity invalidations like Window::draw.
+        cx.update(|window, _| window.refresh());
         cx.draw(
             gpui::point(px(0.), px(0.)),
             gpui::AvailableSpace::min_size(),

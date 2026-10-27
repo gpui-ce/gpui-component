@@ -36,8 +36,10 @@ jobs:
       - name: Verify published recipe fragments
         run: python3 script/check-ai docs
       - uses: oven-sh/setup-bun@v2
-      - name: gpui-pre is pinned exactly
-        run: bun script/check-gpui-pin.ts
+      - name: GPUI CE is pinned exactly
+        run: |
+          bun test script/check-gpui-pin.test.ts
+          bun script/check-gpui-pin.ts
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-machete@0.9.1
@@ -56,7 +58,7 @@ jobs:
       # Lints every member and, as a side effect, type-checks the example
       # crates that the `test` job leaves out.
       - name: Lint
-        run: cargo clippy --workspace --exclude gpui-shell --locked -- --deny warnings
+        run: cargo clippy --workspace --locked -- --deny warnings
 
   no-default-features:
     name: No default features
@@ -71,7 +73,7 @@ jobs:
       - name: Install system dependencies
         run: script/bootstrap
       - name: Check without default features (tree-sitter disabled)
-        run: cargo check -p gpui-component --no-default-features --locked
+        run: cargo check -p gpui_ce_components --no-default-features --locked
       # Control callback, legacy alias, and Form contract tests on the same
       # feature set, so they reuse the build above.
       - name: Test without default features
@@ -124,13 +126,13 @@ jobs:
       # `crates/kit/tests`.
       - name: Test
         run: >-
-          cargo test --workspace --exclude gpui-shell
+          cargo test --workspace
           --features gpui-component-story/test-support --locked
           $TEST_EXCLUDES
       - name: Doc tests
         if: ${{ matrix.run_on == 'macos-latest' }}
         run: >-
-          cargo test --workspace --exclude gpui-shell
+          cargo test --workspace
           --features gpui-component-story/test-support --locked
           $TEST_EXCLUDES --doc
       # `crates/kit/tests/rendering.rs` needs a real Metal device and is opted
@@ -139,98 +141,6 @@ jobs:
       - name: Metal UI rendering tests
         if: ${{ matrix.run_on == 'macos-latest' }}
         run: >-
-          cargo test --workspace --exclude gpui-shell
+          cargo test --workspace
           --features gpui-component-story/test-support --locked
           $TEST_EXCLUDES --test rendering
-
-  gpui-shell-core:
-    name: GPUI Shell Core
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          components: clippy
-          cache-save-if: ${{ github.ref == 'refs/heads/main' }}
-          cache-shared-key: gpui-shell-release
-      # Replaces the system `ld` on Linux and is a no-op elsewhere.
-      - uses: rui314/setup-mold@v1
-      - name: Install system dependencies
-        run: script/bootstrap
-      - name: Test runtime core without standard-library integration cases
-        run: |
-          cargo test -p gpui-shell --release --lib -- \
-            --skip tests::standard_runtime \
-            --skip tests::network \
-            --skip tests::fs \
-            --skip tests::process \
-            --skip tests::benchmark
-          cargo test -p gpui-shell --release tests::benchmark
-          cargo test -p gpui-shell --release --doc
-      - name: Lint GPUI Shell
-        run: cargo clippy -p gpui-shell --all-targets -- -D warnings
-
-  gpui-component-shell:
-    name: GPUI Component Shell
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          components: clippy
-          cache-save-if: ${{ github.ref == 'refs/heads/main' }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      # Replaces the system `ld` on Linux and is a no-op elsewhere.
-      - uses: rui314/setup-mold@v1
-      - name: Install system dependencies
-        run: script/bootstrap
-      - name: Test component bindings
-        run: cargo test -p gpui-component-shell --all-targets
-      - name: Verify generated TypeScript contracts
-        run: |
-          npm --prefix crates/component-shell/tests/types ci
-          npm --prefix crates/component-shell/tests/types test
-      - name: Lint component bindings
-        run: cargo clippy -p gpui-component-shell --all-targets -- -D warnings
-      # The inventory test proves every public component is registered or
-      # explicitly deferred; this proves the JavaScript gallery covers what the
-      # inventory claims. Without it the two drift silently.
-      - name: Verify story coverage against the component inventory
-        run: node examples/js_story/fixtures/verify-coverage.mjs
-
-  gpui-shell-standard-runtime:
-    name: GPUI Shell Standard Runtime (${{ matrix.target }})
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target: aarch64-apple-darwin
-            run_on: macos-latest
-          - target: x86_64-linux-gnu
-            run_on: ubuntu-latest
-          - target: x86_64-windows-msvc
-            run_on: windows-latest
-    runs-on: ${{ matrix.run_on }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          cache-save-if: ${{ github.ref == 'refs/heads/main' }}
-          cache-shared-key: gpui-shell-release
-      # Replaces the system `ld` on Linux and is a no-op elsewhere.
-      - uses: rui314/setup-mold@v1
-      - name: Install system dependencies
-        if: ${{ matrix.run_on != 'windows-latest' }}
-        run: script/bootstrap
-      - name: Test LLRT module integration
-        run: |
-          cargo test -p gpui-shell --release tests::standard_runtime
-          cargo test -p gpui-shell --release tests::fs
-          cargo test -p gpui-shell --release tests::process
-          cargo test -p gpui-shell --release tests::network
-          cargo test -p gpui-shell --release tests::render
-          cargo test -p gpui-shell --release tests::snapshot
-          cargo test -p gpui-shell --release tests::host_api
-          cargo test -p gpui-shell --release tests::http_request

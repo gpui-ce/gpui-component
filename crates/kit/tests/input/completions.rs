@@ -220,7 +220,7 @@ impl Fixture {
             })
         });
         if activate {
-            cx.update_window(handle.into(), |_, window, _| window.activate_window())
+            cx.update_window(handle.into(), |_, window, _| window.activate())
                 .unwrap();
             cx.run_until_parked();
         }

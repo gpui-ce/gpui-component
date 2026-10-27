@@ -670,7 +670,7 @@ fn renaming_observed_elements_preserves_focus_binding(cx: &mut TestAppContext) {
         assert_eq!(window.find("final").focused(), Some(true));
         assert!(window.try_find("original").is_none());
         assert!(window.try_find("renamed").is_none());
-        window.blur();
+        window.blur(cx);
         window.render_frame(cx);
         assert_eq!(window.find("final").focused(), Some(false));
     })

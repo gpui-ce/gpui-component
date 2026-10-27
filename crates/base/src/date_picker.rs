@@ -7,10 +7,7 @@ use gpui::{
     div,
 };
 
-use crate::{
-    StyledExt as _,
-    actions::{Cancel, Confirm},
-};
+use crate::actions::{Cancel, Confirm};
 
 type OpenChange = Rc<dyn Fn(bool, &mut Window, &mut App)>;
 

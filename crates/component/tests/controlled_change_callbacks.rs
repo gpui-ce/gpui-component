@@ -127,7 +127,7 @@ fn controlled_change_callbacks_preserve_activation_and_replace_aliases(cx: &mut 
                     Modifiers::default(),
                 );
                 visual.update(|window, cx| {
-                    window.blur();
+                    window.blur(cx);
                     window.focus_next(cx);
                 });
                 for key in ["enter", "space"] {

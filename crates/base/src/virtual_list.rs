@@ -701,7 +701,10 @@ impl Element for VirtualList {
 
                     let items = (self.render_items)(visible_range.clone(), window, cx);
 
-                    let content_mask = ContentMask { bounds };
+                    let content_mask = ContentMask {
+                        fade_out: Default::default(),
+                        bounds,
+                    };
                     window.with_content_mask(Some(content_mask), |window| {
                         for (mut item, ix) in items.into_iter().zip(visible_range.clone()) {
                             let item_origin = match self.axis {
@@ -825,6 +828,8 @@ mod tests {
         assert!(initial_range.end < item_sizes.len());
 
         scroll_handle.scroll_to_item(12, ScrollStrategy::Top);
+        // Mutating an external scroll handle requires its owner to invalidate the view.
+        cx.update(|window, _| window.refresh());
         cx.update(|window, cx| window.draw(cx).clear(cx));
         let scrolled_range = visible_ranges.borrow().last().cloned().unwrap();
         assert!(scrolled_range.contains(&12));

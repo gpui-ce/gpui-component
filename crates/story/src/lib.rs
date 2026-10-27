@@ -146,7 +146,7 @@ pub fn create_new_window_with_size<F, E>(
             }),
             kind: WindowKind::Normal,
             #[cfg(target_os = "linux")]
-            window_background: story_window_background(),
+            linux_window_background: story_window_background(),
             #[cfg(target_os = "linux")]
             window_decorations: Some(gpui_kit::WindowDecorations::Client),
             ..TitleBar::window_options()
@@ -172,7 +172,7 @@ pub fn create_new_window_with_size<F, E>(
             .expect("failed to open window");
 
         window.update(cx, |_, window, _| {
-            window.activate_window();
+            window.activate();
             window.set_window_title(&title);
         })?;
 
@@ -182,11 +182,11 @@ pub fn create_new_window_with_size<F, E>(
 }
 
 #[cfg(target_os = "linux")]
-fn story_window_background() -> gpui_kit::WindowBackgroundAppearance {
+fn story_window_background() -> gpui_kit::LinuxWindowBackground {
     // The component gallery is a normal application window. Advertising an
     // alpha surface lets compositors show the desktop through light themes,
     // even though every story is designed against an opaque canvas.
-    gpui_kit::WindowBackgroundAppearance::Opaque
+    gpui_kit::LinuxWindowBackground::Opaque
 }
 
 impl Global for AppState {}
@@ -1230,7 +1230,7 @@ mod tests {
     fn component_story_window_is_opaque() {
         assert_eq!(
             super::story_window_background(),
-            gpui_kit::WindowBackgroundAppearance::Opaque
+            gpui_kit::LinuxWindowBackground::Opaque
         );
     }
 

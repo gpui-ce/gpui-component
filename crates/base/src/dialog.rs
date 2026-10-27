@@ -12,8 +12,8 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
+use crate::FocusTrapElement as _;
 use crate::actions::{Cancel, Confirm};
-use crate::{FocusTrapElement as _, StyledExt as _};
 
 const CONTEXT: &str = "Dialog";
 type Decision = Rc<dyn Fn(&ClickEvent, &mut Window, &mut App) -> bool>;

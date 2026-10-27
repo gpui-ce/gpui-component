@@ -5,8 +5,6 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::StyledExt as _;
-
 /// An unstyled container for a set of toggle elements.
 #[derive(IntoElement)]
 pub struct ToggleGroup {

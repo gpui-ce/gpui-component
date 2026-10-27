@@ -9,7 +9,7 @@ use gpui::{
     prelude::FluentBuilder as _,
 };
 
-use crate::{Disableable, Icon, IconName, Sizable, Size, StyleSized as _, StyledExt as _};
+use crate::{Disableable, Icon, IconName, Sizable, Size, StyleSized as _};
 
 use super::{Input, InputState, input::input_style};
 use crate::ThemeStyled as _;

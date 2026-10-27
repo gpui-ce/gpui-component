@@ -2,9 +2,9 @@
 
 use crate::{OngoingScrollExt as _, ScrollbarHandle};
 use gpui::{
-    AnyElement, App, Bounds, ContentMask, DispatchPhase, Element, ElementId, GlobalElementId,
-    Hitbox, HitboxBehavior, InspectorElementId, IntoElement, LayoutId, OngoingScroll, Pixels,
-    ScrollDelta, ScrollWheelEvent, TouchPhase, Window, point, px,
+    AnyElement, App, AppContext as _, Bounds, ContentMask, DispatchPhase, Element, ElementId,
+    GlobalElementId, Hitbox, HitboxBehavior, InspectorElementId, IntoElement, LayoutId,
+    OngoingScroll, Pixels, ScrollDelta, ScrollWheelEvent, TouchPhase, Window, point, px,
 };
 #[cfg(not(target_family = "wasm"))]
 use std::time::Instant;
@@ -247,7 +247,11 @@ impl Element for ScrollBounce {
             state.physics.offset()
         };
         let hitbox = window.insert_hitbox(bounds, HitboxBehavior::Normal);
-        window.with_content_mask(Some(ContentMask { bounds }), |window| {
+        let mask = ContentMask {
+            bounds,
+            fade_out: Default::default(),
+        };
+        window.with_content_mask(Some(mask), |window| {
             window.with_element_offset(point(px(0.), px(offset)), |window| {
                 self.child.prepaint(window, cx);
             });
@@ -405,9 +409,11 @@ impl Element for ScrollBounce {
                 }
             });
         }
-        window.with_content_mask(Some(ContentMask { bounds }), |window| {
-            self.child.paint(window, cx)
-        });
+        let mask = ContentMask {
+            bounds,
+            fade_out: Default::default(),
+        };
+        window.with_content_mask(Some(mask), |window| self.child.paint(window, cx));
     }
 }
 

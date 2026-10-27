@@ -159,7 +159,7 @@ fn blur_splits_typing_without_moving_the_caret(cx: &mut TestAppContext) {
         })
     });
     // GPUI only delivers focus/blur callbacks for an active platform window.
-    cx.update_window(handle.into(), |_, window, _| window.activate_window())
+    cx.update_window(handle.into(), |_, window, _| window.activate())
         .unwrap();
     cx.run_until_parked();
     cx.update_window(handle.into(), |_, window, cx| {

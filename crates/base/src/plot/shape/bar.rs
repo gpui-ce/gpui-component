@@ -1,6 +1,4 @@
-use gpui::{
-    App, Background, Bounds, Corners, PaintQuad, Pixels, Point, Size, Window, fill, point, px,
-};
+use gpui::{App, Background, Bounds, Corners, PaintQuad, Pixels, Point, Size, Window, point, px};
 
 use crate::plot::{
     label::{PlotLabel, TEXT_GAP, TEXT_HEIGHT, TEXT_SIZE, Text},
@@ -217,7 +215,11 @@ impl<T> Bar<T> {
             };
 
             let bg = (self.fill)(v, frame, self.alignment);
-            graph.push(fill(Bounds::from_corners(p1, p2), bg).corner_radii(self.corner_radii));
+            graph.push(
+                gpui::PaintQuad::new(Bounds::from_corners(p1, p2))
+                    .background(bg)
+                    .corner_radii(self.corner_radii),
+            );
 
             if let Some(label) = &self.label {
                 let label_origin = label_origin(self.alignment, cross, base, value, bw);

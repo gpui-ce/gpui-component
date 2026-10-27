@@ -3,10 +3,7 @@ use gpui::{
     prelude::FluentBuilder as _, relative, rems,
 };
 
-use crate::{
-    ActiveTheme as _, Colorize as _, StyledExt as _, button::Button, message::MessageAlignment,
-    v_flex,
-};
+use crate::{ActiveTheme as _, Colorize as _, button::Button, message::MessageAlignment, v_flex};
 
 /// Visual treatment for a chat bubble.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]

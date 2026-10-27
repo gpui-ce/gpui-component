@@ -98,7 +98,11 @@ impl Element for MotionReveal {
         if changed {
             window.request_animation_frame();
         }
-        window.with_content_mask(Some(ContentMask { bounds }), |window| {
+        let mask = ContentMask {
+            bounds,
+            fade_out: Default::default(),
+        };
+        window.with_content_mask(Some(mask), |window| {
             self.child.prepaint_at(bounds.origin, window, cx);
         });
     }
@@ -113,7 +117,11 @@ impl Element for MotionReveal {
         window: &mut Window,
         cx: &mut App,
     ) {
-        window.with_content_mask(Some(ContentMask { bounds }), |window| {
+        let mask = ContentMask {
+            bounds,
+            fade_out: Default::default(),
+        };
+        window.with_content_mask(Some(mask), |window| {
             self.child.paint(window, cx);
         });
     }

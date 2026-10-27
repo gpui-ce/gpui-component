@@ -5,8 +5,6 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::StyledExt as _;
-
 /// An unstyled container for a set of radio elements.
 #[derive(IntoElement)]
 pub struct RadioGroup {

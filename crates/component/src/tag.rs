@@ -1,4 +1,4 @@
-use crate::{ColorName, Sizable, Size, StyledExt, theme::ActiveTheme as _};
+use crate::{ColorName, Sizable, Size, theme::ActiveTheme as _};
 use gpui::ColorExt as _;
 use gpui::{
     AbsoluteLength, AnyElement, App, Hsla, InteractiveElement as _, IntoElement, ParentElement,

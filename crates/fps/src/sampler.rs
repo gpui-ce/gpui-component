@@ -2,7 +2,7 @@ use std::{collections::VecDeque, time::Duration};
 
 use gpui::{
     WindowId,
-    profiler::{FrameTiming, FrameTimingCollector},
+    profiler::{FrameEvent, FrameTiming, FrameTimingCollector},
 };
 use web_time::Instant;
 
@@ -103,20 +103,25 @@ impl FrameSampler {
     /// Drains the frames drawn since the previous call. Call once per rendered
     /// frame.
     pub(crate) fn tick(&mut self) {
-        // GPUI-CE's profiler reports draw timings only; there are no present
-        // events to source, so the present pipeline stays empty on this frame.
-        let draws = self
-            .collector
-            .collect_unseen()
-            .into_iter()
-            .filter(|timing| timing.window_id == self.window_id)
-            .collect::<Vec<_>>();
+        let mut draws = Vec::new();
+        let mut presents = Vec::new();
+        for event in self.collector.collect_unseen() {
+            match event {
+                FrameEvent::Draw(timing) if timing.window_id == self.window_id => {
+                    draws.push(timing)
+                }
+                FrameEvent::Present(timing) if timing.window_id == self.window_id => {
+                    presents.push(timing.present_end)
+                }
+                _ => {}
+            }
+        }
         if !self.drained_backlog {
             self.drained_backlog = true;
             self.warmup = self.warmup.saturating_add(draws.len() as u32);
         }
         self.ingest_draws(draws);
-        self.ingest_presents([], Instant::now());
+        self.ingest_presents(presents, Instant::now());
     }
 
     /// Starts over, as for a HUD shown again after a spell hidden: a new
@@ -519,6 +524,9 @@ mod tests {
             invalidations,
             draw_start: start,
             draw_end: start + draw,
+            refresh_interval: None,
+            signal_at: None,
+            phases: Default::default(),
         }
     }
 
@@ -545,6 +553,9 @@ mod tests {
             invalidations,
             draw_start: start,
             draw_end: start + draw,
+            refresh_interval: None,
+            signal_at: None,
+            phases: Default::default(),
         }
     }
 

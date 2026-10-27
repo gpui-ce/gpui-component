@@ -48,7 +48,6 @@ smallvec.workspace = true
 sum-tree.workspace = true
 tracing.workspace = true
 unicode-segmentation = "1.12.0"
-syntect.workspace = true
 
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
 smol.workspace = true
@@ -72,6 +71,7 @@ windows = { workspace = true, features = ["Win32_Foundation", "Win32_UI_WindowsA
 ashpd = { version = "0.13", default-features = false, features = ["async-io", "settings"] }
 
 [dev-dependencies]
+gpui_ce_parley = { version = "0.3.0", default-features = false }
 criterion = "0.5"
 gpui = { workspace = true, features = ["test-support"] }
 gpui_platform = { workspace = true, features = ["test-support"] }

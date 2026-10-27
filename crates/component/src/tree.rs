@@ -6,7 +6,7 @@ use gpui::{
 };
 
 use crate::{
-    Selectable as _, StyledExt,
+    Selectable as _,
     list::ListItem,
     menu::{ContextMenuExt as _, PopupMenu},
     scroll::ScrollableElement,

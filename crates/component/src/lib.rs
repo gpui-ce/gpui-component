@@ -165,3 +165,6 @@ pub(crate) fn measure_enable() -> bool {
     static MEASURE_ENABLED: LazyLock<bool> = LazyLock::new(gpui_base::measurement_enabled);
     *MEASURE_ENABLED
 }
+
+#[cfg(test)]
+mod test_text_system;

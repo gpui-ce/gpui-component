@@ -6,7 +6,7 @@ use gpui::{
     prelude::FluentBuilder as _,
 };
 
-use crate::{ActiveTheme, Icon, IconName, StyledExt, h_flex};
+use crate::{ActiveTheme, Icon, IconName, h_flex};
 
 /// A breadcrumb navigation element.
 #[derive(IntoElement)]

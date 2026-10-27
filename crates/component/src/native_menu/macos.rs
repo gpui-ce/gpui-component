@@ -2,7 +2,7 @@
 
 use std::{cell::Cell, sync::Arc};
 
-use gpui::{Action, App, AssetSource, Pixels, Point, Window};
+use gpui::{Action, App, AssetRegistry, Pixels, Point, Window};
 use objc2::rc::Retained;
 use objc2::runtime::{AnyObject, NSObject};
 use objc2::{AnyThread, DefinedClass, MainThreadMarker, define_class, msg_send, sel};
@@ -52,7 +52,7 @@ impl MenuTarget {
 /// borrowed while the menu is open.
 pub(super) fn show(
     items: Vec<NativeMenuItem>,
-    asset_source: Arc<dyn AssetSource>,
+    assets: Arc<AssetRegistry>,
     position: Point<Pixels>,
     window: &mut Window,
     cx: &mut App,
@@ -65,7 +65,7 @@ pub(super) fn show(
     let handle = Window::window_handle(window);
 
     cx.spawn(async move |cx| {
-        let action = run_menu(view_ptr, &items, asset_source.as_ref(), position);
+        let action = run_menu(view_ptr, &items, assets.as_ref(), position);
         let _ = cx.update(move |app| {
             let _ = handle.update(app, move |_, window, app| {
                 if let Some(action) = action {
@@ -88,7 +88,7 @@ pub(super) fn show(
 fn run_menu(
     view_ptr: usize,
     items: &[NativeMenuItem],
-    asset_source: &dyn AssetSource,
+    assets: &AssetRegistry,
     position: Point<Pixels>,
 ) -> Option<Box<dyn Action>> {
     let mtm = MainThreadMarker::new()?;
@@ -98,7 +98,7 @@ fn run_menu(
 
     let target = MenuTarget::new();
     let mut actions: Vec<&Box<dyn Action>> = Vec::new();
-    let ns_menu = build_menu(items, asset_source, &target, mtm, &mut actions);
+    let ns_menu = build_menu(items, assets, &target, mtm, &mut actions);
 
     // `position` is window-relative, logical pixels, origin top-left (GPUI).
     // AppKit view coordinates have their origin at the bottom-left, so flip y.
@@ -121,7 +121,7 @@ fn run_menu(
 /// to its index in `actions`, so the selected tag maps back to its action.
 fn build_menu<'a>(
     items: &'a [NativeMenuItem],
-    asset_source: &dyn AssetSource,
+    assets: &AssetRegistry,
     target: &MenuTarget,
     mtm: MainThreadMarker,
     actions: &mut Vec<&'a Box<dyn Action>>,
@@ -145,7 +145,7 @@ fn build_menu<'a>(
                     ns_item.setTitle(&NSString::from_str(label));
                     ns_item.setEnabled(!*disabled);
                     if let Some(icon) = icon {
-                        if let Some(ns_image) = ns_image_for_icon(icon, asset_source) {
+                        if let Some(ns_image) = ns_image_for_icon(icon, assets) {
                             ns_image.setSize(NSSize::new(MENU_IMAGE_SIZE, MENU_IMAGE_SIZE));
                             ns_image.setTemplate(true);
                             ns_item.setImage(Some(&ns_image));
@@ -173,7 +173,7 @@ fn build_menu<'a>(
                 items,
             } => {
                 let ns_item = NSMenuItem::new(mtm);
-                let submenu = build_menu(items, asset_source, target, mtm, actions);
+                let submenu = build_menu(items, assets, target, mtm, actions);
                 ns_item.setTitle(&NSString::from_str(label));
                 ns_item.setEnabled(!*disabled);
                 ns_item.setSubmenu(Some(&submenu));
@@ -185,11 +185,8 @@ fn build_menu<'a>(
     menu
 }
 
-fn ns_image_for_icon(
-    icon: &crate::Icon,
-    asset_source: &dyn AssetSource,
-) -> Option<Retained<NSImage>> {
-    let image = resolve_icon_image(icon, asset_source)?;
+fn ns_image_for_icon(icon: &crate::Icon, assets: &AssetRegistry) -> Option<Retained<NSImage>> {
+    let image = resolve_icon_image(icon, assets)?;
     if image.bytes.is_empty() {
         return None;
     }

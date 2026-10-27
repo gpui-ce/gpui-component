@@ -1,4 +1,4 @@
-use crate::{StyledExt as _, input::blink_cursor::BlinkCursor};
+use crate::input::blink_cursor::BlinkCursor;
 use gpui::{
     AnyElement, App, AppContext as _, Context, Empty, Entity, EventEmitter, FocusHandle, Focusable,
     InteractiveElement as _, IntoElement, KeyDownEvent, ParentElement, Render, RenderOnce,

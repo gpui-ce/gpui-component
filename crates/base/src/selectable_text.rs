@@ -2,8 +2,8 @@ use std::ops::Range;
 
 use gpui::{
     App, BorderStyle, Bounds, Corners, Edges, Element, ElementId, GlobalElementId, Hitbox,
-    HitboxBehavior, Hsla, InspectorElementId, IntoElement, LayoutId, PaintQuad, Pixels, Point,
-    SharedString, StyledText, TextStyleRefinement, Window, transparent_black,
+    HitboxBehavior, Hsla, InspectorElementId, IntoElement, LayoutId, Pixels, Point, SharedString,
+    StyledText, TextStyleRefinement, Window, transparent_black,
 };
 
 use crate::{TextSelection, TextSelectionHandle, TextSelectionRegistration, TextSelectionRun};
@@ -85,14 +85,14 @@ impl SelectableText {
             return;
         };
         for bounds in selection_quad_bounds(start, end, layout.bounds(), layout.line_height()) {
-            window.paint_quad(PaintQuad {
-                bounds,
-                background: color.into(),
-                corner_radii: Corners::default(),
-                border_widths: Edges::default(),
-                border_color: transparent_black(),
-                border_style: BorderStyle::default(),
-            });
+            window.paint_quad(
+                gpui::PaintQuad::new(bounds)
+                    .background(color)
+                    .corner_radii(Corners::default())
+                    .border_widths(Edges::default())
+                    .border_color(transparent_black())
+                    .border_style(BorderStyle::default()),
+            );
         }
     }
 }
@@ -173,6 +173,14 @@ impl Element for SelectableText {
             self.styled_text
                 .request_layout(global_id, inspector_id, window, cx)
         };
+        let layout_id = window.request_layout(
+            gpui::Style {
+                display: gpui::Display::Flex,
+                ..Default::default()
+            },
+            [layout_id],
+            cx,
+        );
         (layout_id, handle)
     }
 

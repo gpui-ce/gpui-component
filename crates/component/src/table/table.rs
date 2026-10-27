@@ -9,7 +9,7 @@ use gpui_base::{
     TableRow as BaseTableRow,
 };
 
-use crate::{ActiveTheme as _, AnyChildElement, ChildElement, Sizable, Size, StyledExt as _};
+use crate::{ActiveTheme as _, AnyChildElement, ChildElement, Sizable, Size};
 
 const MIN_CELL_WIDTH: Pixels = px(100.);
 

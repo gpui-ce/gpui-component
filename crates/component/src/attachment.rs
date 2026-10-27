@@ -1,12 +1,12 @@
 use std::{rc::Rc, time::Duration};
 
 use gpui::{
-    AbsoluteLength, AnyElement, App, Axis, Bounds, ClickEvent, ColorExt as _, ElementId, Hsla,
-    ImageSource, InteractiveElement as _, IntoElement, MouseButton, ObjectFit, ParentElement, Path,
-    PathBuilder, Pixels, Refineable as _, RenderOnce, ScrollHandle, SharedString,
-    StatefulInteractiveElement as _, StyleRefinement, Styled, StyledImage as _, Window, black,
-    canvas, div, img, linear_color_stop, linear_gradient, point, prelude::FluentBuilder as _, px,
-    relative, rems, white,
+    AbsoluteLength, AnyElement, App, AppContext as _, Axis, Bounds, ClickEvent, ColorExt as _,
+    ElementId, Hsla, ImageSource, InteractiveElement as _, IntoElement, MouseButton, ObjectFit,
+    ParentElement, Path, PathBuilder, Pixels, Refineable as _, RenderOnce, ScrollHandle,
+    SharedString, StatefulInteractiveElement as _, StyleRefinement, Styled, StyledImage as _,
+    Window, black, canvas, div, img, linear_color_stop, linear_gradient, point,
+    prelude::FluentBuilder as _, px, relative, rems, white,
 };
 use gpui_base::{
     is_mobile,

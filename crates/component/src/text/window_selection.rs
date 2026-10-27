@@ -70,8 +70,20 @@ mod tests {
             window: &mut Window,
             cx: &mut App,
         ) -> (LayoutId, Self::RequestLayoutState) {
-            self.styled_text
-                .request_layout(id, inspector_id, window, cx)
+            let (layout_id, ()) = self
+                .styled_text
+                .request_layout(id, inspector_id, window, cx);
+            (
+                window.request_layout(
+                    gpui::Style {
+                        display: gpui::Display::Flex,
+                        ..Default::default()
+                    },
+                    [layout_id],
+                    cx,
+                ),
+                (),
+            )
         }
 
         fn prepaint(

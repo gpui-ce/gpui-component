@@ -952,7 +952,11 @@ mod tests {
         });
         cx.run_until_parked();
         log.borrow_mut().draggable.clear();
-        cx.update(|window, cx| window.draw(cx).clear(cx));
+        cx.update(|window, cx| {
+            // This probe observes renderer calls, so request a fresh render.
+            window.refresh();
+            window.draw(cx).clear(cx);
+        });
 
         assert_eq!(
             log.borrow().draggable,
@@ -980,7 +984,11 @@ mod tests {
         });
         cx.run_until_parked();
         log.borrow_mut().draggable.clear();
-        cx.update(|window, cx| window.draw(cx).clear(cx));
+        cx.update(|window, cx| {
+            // This probe observes renderer calls, so request a fresh render.
+            window.refresh();
+            window.draw(cx).clear(cx);
+        });
 
         assert_eq!(
             log.borrow().draggable,

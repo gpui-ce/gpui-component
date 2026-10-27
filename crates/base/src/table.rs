@@ -5,8 +5,6 @@ use gpui::{
     Window, div, prelude::FluentBuilder as _,
 };
 
-use crate::StyledExt as _;
-
 macro_rules! table_part {
     ($name:ident, $role:expr, $docs:literal) => {
         #[doc = $docs]

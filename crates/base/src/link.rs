@@ -8,7 +8,7 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::{StateStyle, StyledExt as _};
+use crate::StateStyle;
 
 type ActivationHandler = Rc<dyn Fn(&ClickEvent, &mut Window, &mut App)>;
 type OpenHandler = Rc<dyn Fn(&str, &ClickEvent, &mut Window, &mut App)>;

@@ -12,7 +12,7 @@ use gpui_base::{ElementExt as _, TextSelectionScopeId};
 use rust_i18n::t;
 
 use crate::{
-    ActiveTheme as _, IconName, Sizable as _, StyledExt, TITLE_BAR_HEIGHT, WindowExt as _,
+    ActiveTheme as _, IconName, Sizable as _, TITLE_BAR_HEIGHT, WindowExt as _,
     animation::cubic_bezier,
     button::{Button, ButtonVariant, ButtonVariants as _},
     dialog::{DialogContent, DialogDispatchAnchor, DialogTitle},
@@ -713,7 +713,7 @@ impl RenderOnce for Dialog {
                                                 })
                                                 .when(!self.children.is_empty(), |this| {
                                                     this.child(
-                                                        div().flex_1().overflow_hidden().child(
+                                                        v_flex().flex_1().overflow_hidden().child(
                                                             // Body
                                                             v_flex()
                                                                 .size_full()
@@ -756,14 +756,14 @@ impl RenderOnce for Dialog {
                                                 // This is equivalent to `shadow_xl` with an extra opacity.
                                                 let shadow = vec![
                                                     BoxShadow {
-                                                        color: hsla(0., 0., 0., 0.1 * delta),
+                                                        color: hsla(0., 0., 0., 0.1 * delta).into(),
                                                         offset: point(px(0.), px(20.)),
                                                         blur_radius: px(25.),
                                                         spread_radius: px(-5.),
                                                         inset: false,
                                                     },
                                                     BoxShadow {
-                                                        color: hsla(0., 0., 0., 0.1 * delta),
+                                                        color: hsla(0., 0., 0., 0.1 * delta).into(),
                                                         offset: point(px(0.), px(8.)),
                                                         blur_radius: px(10.),
                                                         spread_radius: px(-6.),

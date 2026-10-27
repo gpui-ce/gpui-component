@@ -134,7 +134,7 @@ fn scrollable_elements_forward_observed_focus_binding(cx: &mut TestAppContext) {
             window.within("scroll").find(content.clone()).focused(),
             Some(true)
         );
-        window.blur();
+        window.blur(cx);
         window.render_frame(cx);
         assert_eq!(window.within("scroll").find(content).focused(), Some(false));
     })

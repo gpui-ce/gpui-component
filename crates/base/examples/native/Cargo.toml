@@ -23,7 +23,7 @@ gpui = { workspace = true, features = ["test-support"] }
 [lints]
 workspace = true
 
-# The shared showcase is included with `#[path]`, which cargo-machete cannot
-# follow when detecting its `chrono`, `gpui`, `gpui_base`, and `syntect` imports.
+# Shared showcase and HTTP modules are included with `#[path]`, which
+# cargo-machete cannot follow when detecting these imports.
 [package.metadata.cargo-machete]
-ignored = ["chrono", "gpui", "gpui-base", "syntect"]
+ignored = ["chrono", "futures", "reqwest", "syntect"]

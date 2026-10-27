@@ -11,7 +11,7 @@ use rust_i18n::t;
 
 use crate::ThemeStyled as _;
 use crate::{
-    ActiveTheme, Disableable, Icon, IconName, Sizable, Size, StyleSized as _, StyledExt as _,
+    ActiveTheme, Disableable, Icon, IconName, Sizable, Size, StyleSized as _,
     actions::{Cancel, Confirm},
     button::{Button, ButtonVariants as _},
     h_flex,
@@ -23,7 +23,7 @@ use super::calendar::{Calendar, CalendarEvent, CalendarState, Date, Matcher};
 use super::time_field::{
     HourCycle, TimeField, TimeFieldEvent, TimeFieldState, TimePrecision, tabular_figures,
 };
-use gpui_base::{DatePicker as BaseDatePicker, ElementExt as _};
+use gpui_base::DatePicker as BaseDatePicker;
 
 const CONTEXT: &'static str = "DatePicker";
 pub(crate) fn init(cx: &mut App) {
@@ -708,9 +708,11 @@ impl RenderOnce for DatePicker {
             .flex_none()
             .w_full()
             .relative()
-            .on_prepaint({
-                let state = self.state.clone();
-                move |bounds, _, cx| state.update(cx, |state, _| state.bounds = bounds)
+            .map(|this| {
+                gpui_base::ElementExt::on_prepaint(this, {
+                    let state = self.state.clone();
+                    move |bounds, _, cx| state.update(cx, |state, _| state.bounds = bounds)
+                })
             })
             .input_text_size(self.size)
             .refine_style(&self.style)

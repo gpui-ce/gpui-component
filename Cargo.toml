@@ -58,14 +58,14 @@ story = { path = "crates/story" }
 
 # GPUI CE is published to crates.io as `gpui-ce` with its platform, web and
 # macros split into sibling crates.
-gpui = { package = "gpui-ce", version = "0.2.2" }
-gpui_platform = { package = "gpui_ce_platform", version = "0.1.0", features = [
+gpui = { package = "gpui-ce", version = "=0.3.0" }
+gpui_platform = { package = "gpui_ce_platform", version = "=0.3.0", features = [
   "font-kit",
   "x11",
   "wayland",
 ] }
-gpui_web = { package = "gpui_ce_web", version = "0.1.0" }
-gpui_macros = { package = "gpui_ce_macros", version = "0.1.0" }
+gpui_web = { package = "gpui_ce_web", version = "=0.3.0" }
+gpui_macros = { package = "gpui_ce_macros", version = "=0.3.0" }
 sum-tree = { version = "0.2.0", package = "zed-sum-tree" }
 reqwest = { version = "0.12.15-zed", package = "zed-reqwest", default-features = false, features = [
   "charset",

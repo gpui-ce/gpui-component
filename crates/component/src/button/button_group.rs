@@ -9,7 +9,7 @@ use gpui::{
 use std::{cell::Cell, rc::Rc};
 
 use crate::{
-    Disableable, Sizable, Size, StyledExt,
+    Disableable, Sizable, Size,
     button::{Button, ButtonVariant, ButtonVariants},
 };
 

@@ -4,7 +4,7 @@ use gpui::{
 };
 
 use crate::{
-    StyledExt as _, WindowExt as _,
+    WindowExt as _,
     button::ButtonVariant,
     dialog::{
         Dialog, DialogButtonProps, DialogDescription, DialogFooter, DialogHeader, DialogTitle,

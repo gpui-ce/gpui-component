@@ -4,7 +4,7 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::{ActiveTheme, StyledExt, h_flex};
+use crate::{ActiveTheme, h_flex};
 
 /// A horizontal status bar, usually placed at the bottom of a window or pane.
 ///

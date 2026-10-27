@@ -8,7 +8,6 @@ use gpui::{
 use crate::{
     Select,
     actions::{Cancel, Confirm, SelectDown, SelectUp},
-    styled::StyledExt as _,
 };
 
 const CONTEXT: &str = "Combobox";

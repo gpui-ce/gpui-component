@@ -7,7 +7,7 @@ use gpui::{
 };
 
 use crate::{
-    History, StyledExt as _,
+    History,
     motion::{Presence, PresencePhase, Transition},
 };
 

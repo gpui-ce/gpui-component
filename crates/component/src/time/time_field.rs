@@ -6,8 +6,8 @@ use gpui::{
 };
 
 use crate::{
-    ActiveTheme as _, Disableable, Sizable, Size, StyleSized as _, StyledExt as _,
-    ThemeStyled as _, input::input_style,
+    ActiveTheme as _, Disableable, Sizable, Size, StyleSized as _, ThemeStyled as _,
+    input::input_style,
 };
 
 use gpui_base::TimeField as BaseTimeField;

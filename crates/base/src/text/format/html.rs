@@ -768,8 +768,8 @@ mod tests {
     #[test]
     fn test_value_to_length() {
         assert_eq!(super::value_to_length("100px"), Some(px(100.).into()));
-        assert_eq!(super::value_to_length("100%"), Some(relative(1.)));
-        assert_eq!(super::value_to_length("56%"), Some(relative(0.56)));
+        assert_eq!(super::value_to_length("100%"), Some(relative(1.).into()));
+        assert_eq!(super::value_to_length("56%"), Some(relative(0.56).into()));
         assert_eq!(super::value_to_length("240"), Some(px(240.).into()));
     }
 
@@ -808,7 +808,7 @@ mod tests {
                     children: vec![InlineNode::image(ImageNode {
                         url: "https://example.com/image.png".to_string().into(),
                         alt: Some("Example".to_string().into()),
-                        width: Some(relative(0.8)),
+                        width: Some(relative(0.8).into()),
                         height: None,
                         title: Some("Example Image".to_string().into()),
                         ..Default::default()

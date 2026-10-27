@@ -1,6 +1,6 @@
 //! Window roots and presentation-layer plugins.
+use crate::TextSelectionLayer;
 use crate::input::Copy;
-use crate::{StyledExt, TextSelectionLayer};
 use gpui::{
     AnyElement, AnyView, App, AppContext, ClipboardItem, Context, Div, Entity, Global,
     InteractiveElement, IntoElement, KeyBinding, ParentElement, Render, Stateful, StyleRefinement,

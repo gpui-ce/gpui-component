@@ -1,8 +1,6 @@
 use std::rc::Rc;
 
-use crate::{
-    ActiveTheme, Icon, IconName, InteractiveElementExt as _, Sizable as _, StyledExt, h_flex,
-};
+use crate::{ActiveTheme, Icon, IconName, InteractiveElementExt as _, Sizable as _, h_flex};
 use gpui::{
     AnyElement, App, Background, ClickEvent, Context, Decorations, Hsla, InteractiveElement,
     IntoElement, MouseButton, ParentElement, Pixels, Render, RenderOnce, Rgba,

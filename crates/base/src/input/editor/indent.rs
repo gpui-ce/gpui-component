@@ -96,7 +96,6 @@ impl<M: InputModeKind> TextElement<M> {
                 underline: None,
                 letter_spacing: None,
             }],
-            None,
         );
 
         layout.width

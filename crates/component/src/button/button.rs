@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use crate::{
     ActiveTheme, Colorize as _, Disableable, Icon, Placement, RoleOverride, Selectable, Sizable,
-    Size, StyleSized, StyledExt,
+    Size, StyleSized,
     button::ButtonIcon,
     h_flex,
     select::Caret,

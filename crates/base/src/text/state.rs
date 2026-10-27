@@ -2728,11 +2728,14 @@ mod tests {
             container: Container,
             cx: &'a mut TestAppContext,
         ) -> (Entity<TextViewState>, &'a mut VisualTestContext) {
+            crate::test_text_system::install(cx);
             cx.update(crate::init);
             let (root, cx) = cx.add_window_view(|_, cx| Root {
                 state: cx.new(|cx| TextViewState::markdown(markdown, cx)),
                 container,
             });
+            // GPUI 0.3 lays the root out at the actual viewport size.
+            cx.simulate_resize(gpui::size(px(200.), px(100.)));
             cx.run_until_parked();
             draw(cx);
             let state = root.read_with(cx, |root, _| root.state.clone());

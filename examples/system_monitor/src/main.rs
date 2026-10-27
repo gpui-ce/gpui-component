@@ -568,7 +568,7 @@ fn main() {
         };
 
         gpui_kit::open_window(window_options, cx, |window, cx| {
-            window.activate_window();
+            window.activate();
             window.set_window_title("System Monitor");
 
             Theme::change(ThemeMode::Dark, Some(window), cx);

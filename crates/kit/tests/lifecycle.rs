@@ -28,7 +28,11 @@ impl Render for Host {
             .size_full()
             .when(self.hidden, |this| this.invisible())
             .when(self.mounted, |this| {
-                this.child(self.child.clone().cached(Default::default()))
+                this.child(
+                    self.child
+                        .clone()
+                        .cached(gpui::StyleRefinement::default().size(px(40.))),
+                )
             })
     }
 }

@@ -48,27 +48,14 @@ pub(crate) fn init(cx: &mut App) {
         });
     });
 
-    cx.register_inspector_element(|id, state: &DivInspectorState, window, cx| {
-        // The registry runs once, before any window exists to inspect; the
-        // view is built lazily on the first inspection instead.
-        #[derive(Default)]
-        struct DivInspectorGlobal {
-            view: Option<Entity<DivInspector>>,
+    cx.register_inspector_element(|window, cx| {
+        let div_inspector = cx.new(|cx| DivInspector::new(window, cx));
+        move |id, state: &DivInspectorState, window, cx| {
+            div_inspector.update(cx, |this, cx| {
+                this.update_inspected_element(id, state.clone(), window, cx);
+                this.render(window, cx).into_any_element()
+            })
         }
-        impl gpui::Global for DivInspectorGlobal {}
-        if cx.try_global::<DivInspectorGlobal>().is_none() {
-            cx.set_global(DivInspectorGlobal::default());
-        }
-        let existing = cx.global::<DivInspectorGlobal>().view.clone();
-        let div_inspector = existing.unwrap_or_else(|| {
-            let view = cx.new(|cx| DivInspector::new(window, cx));
-            cx.global_mut::<DivInspectorGlobal>().view = Some(view.clone());
-            view
-        });
-        div_inspector.update(cx, |this, cx| {
-            this.update_inspected_element(id, state.clone(), window, cx);
-            this.render(window, cx).into_any_element()
-        })
     });
 
     cx.set_inspector_renderer(Box::new(render_inspector));

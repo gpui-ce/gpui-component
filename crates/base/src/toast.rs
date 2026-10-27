@@ -12,10 +12,7 @@ use gpui::{
     prelude::FluentBuilder as _, px,
 };
 
-use crate::{
-    StyledExt as _,
-    motion::{Spring, spring},
-};
+use crate::motion::{Spring, spring};
 
 /// Motion tokens used by an unstyled toast stack.
 #[derive(Clone, Copy, Debug)]

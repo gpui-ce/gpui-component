@@ -156,7 +156,7 @@ mod macos {
         cx.update_window(handle, |_, window, cx| {
             window.click("name", cx);
             window.input("Ada", cx);
-            window.blur();
+            window.blur(cx);
             window.render_frame(cx);
             assert_eq!(window.find("name").value(), Some("Ada"));
         })

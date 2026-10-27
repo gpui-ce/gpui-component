@@ -528,7 +528,7 @@ impl RenderOnce for TabBar {
                     // `on_prepaint` adds a canvas child. Keep that helper on
                     // the non-scrolling wrapper so it cannot shift tab indices.
                     .when_some(bounds_rc.clone(), |this, rc| {
-                        this.on_prepaint(move |bounds, _, _| {
+                        gpui_base::ElementExt::on_prepaint(this, move |bounds, _, _| {
                             rc.borrow_mut().container = bounds;
                         })
                     })

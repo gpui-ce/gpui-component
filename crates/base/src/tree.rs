@@ -9,10 +9,7 @@ use gpui::{
     uniform_list,
 };
 
-use crate::{
-    actions::{Confirm, SelectDown, SelectLeft, SelectRight, SelectUp},
-    styled::StyledExt as _,
-};
+use crate::actions::{Confirm, SelectDown, SelectLeft, SelectRight, SelectUp};
 
 const CONTEXT: &str = "Tree";
 

@@ -10,8 +10,8 @@ use gpui_base::{ColorPicker as BaseColorPicker, ColorSwatch};
 pub use gpui_base::{ColorPickerEvent, ColorPickerState};
 
 use crate::{
-    ActiveTheme as _, Colorize as _, Icon, Selectable, Sizable, Size, StyleSized, StyledExt as _,
-    ThemeStyled as _, h_flex,
+    ActiveTheme as _, Colorize as _, Icon, Selectable, Sizable, Size, StyleSized, ThemeStyled as _,
+    h_flex,
     input::{Input, input_style},
     popover::Popover,
     select::Caret,

@@ -117,6 +117,7 @@ pub(crate) fn reveal_mask(
     let start = bounds.left() + px(left) - bleed;
     let end = start + (bounds.right() + bleed - start) * progress.max(0.);
     Some(ContentMask {
+        fade_out: Default::default(),
         bounds: Bounds::from_corners(
             gpui::point(bounds.left() - bleed, bounds.top() - bleed),
             gpui::point(end, bounds.bottom() + bleed),
@@ -572,6 +573,7 @@ impl PointAxes {
 pub(crate) fn pinned_plot_mask(bounds: Bounds<Pixels>, height: f32) -> ContentMask<Pixels> {
     let bleed = HOVER_DOT_SIZE / 2.;
     ContentMask {
+        fade_out: Default::default(),
         bounds: Bounds::from_corners(
             bounds.origin - gpui::point(bleed, bleed),
             gpui::point(bounds.right() + bleed, bounds.top() + px(height) + bleed),
